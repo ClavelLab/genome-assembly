@@ -1,8 +1,10 @@
 # Indicate the local path to the samples table in a tabular format
 samples: config/demo.tsv
 
-# Indicate the path to the Illumina adapters to be removed during the trimming
+# Indicate the path to the Illumina adapters and the PhiX genome
+# to be removed during the trimming
 adapters: resources/NexteraPE-PE.fa
+phix: resources/phix.fasta
 
 # The threads number to be used for parallelisation
 threads: 2

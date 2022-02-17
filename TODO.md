@@ -43,6 +43,6 @@ Listed in the reverse order because it is easier for Snakemake design. The subse
 
 ### Quality filtering 
 
-- [ ] Remove phiX sequences from reads with bbduk included in the bbmap (v38.84). Snakemake wrapper available
+- [x] Remove phiX sequences from reads with bbduk included in the bbmap (v38.84). Snakemake wrapper available
 - [x] Remove adaptaters and filter length with trimmomatic (v0.39). Snakemake wrapper available but older (0.36) so bioconda.
  

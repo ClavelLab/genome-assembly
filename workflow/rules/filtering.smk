@@ -24,3 +24,21 @@ rule remove_adaptater_filter_length:
         ILLUMINACLIP:{params.illumina_clip}:2:30:10 \
         {params.extra} &> {log}
         """
+
+rule remove_phix:
+    input:
+        sample=["results/trimmed/{isolate}.1.fastq", "results/trimmed/{isolate}.2.fastq"],
+        adapters=config["phix"],
+    output:
+        trimmed=["results/trimmed/{isolate}.1.phix.fastq", "results/trimmed/pe/{isolate}.2.phix.fastq"],
+        #singleton="trimmed/pe/{isolate}.single.fastq",
+        #discarded="trimmed/pe/{isolate}.discarded.fastq",
+        #stats="trimmed/pe/{isolate}.stats.txt",
+    log:
+        "logs/remove_phix/{isolate}.log",
+    params:
+        extra = lambda w, input: "ref={} k=31 hdist=1".format(input.adapters),
+    threads:
+        config["threads"],
+    wrapper:
+        "v1.1.0/bio/bbtools/bbduk"
