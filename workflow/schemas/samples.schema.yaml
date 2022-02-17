@@ -3,7 +3,7 @@ $schema: "http://json-schema.org/draft-06/schema#"
 description: an entry in the sample sheet
 
 properties:
-    isolates:
+    isolate:
           type: string
           description: isolate identifier without "_"
     fq1:
@@ -14,5 +14,5 @@ properties:
           description: path to the FASTQ reverse file (for now local)
 
 required:
-  - isolates
+  - isolate
   - fq1

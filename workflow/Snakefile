@@ -3,13 +3,17 @@ from snakemake.utils import min_version
 #### set minimum snakemake version #####
 min_version("6.15.5")
 
+
 ##### setup report #####
 configfile: "config/config.yaml"
 
+
 ##### load rules #####
 include: "rules/common.smk"
+include: "rules/filtering.smk"
+
 
 ##### target rules #####
 rule all:
     input:
-        expand("results/{isolate}.fasta", isolate=samples.index),
+        expand("results/{isolate}.fasta", isolate=samples["isolate"]),
