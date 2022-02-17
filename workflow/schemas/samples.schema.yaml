@@ -1,0 +1,18 @@
+$schema: "http://json-schema.org/draft-06/schema#"
+
+description: an entry in the sample sheet
+
+properties:
+    isolates:
+          type: string
+          description: isolate identifier without "_"
+    fq1:
+          type: string
+          description: path to the FASTQ forward file (for now local)
+    fq2:
+          type: string
+          description: path to the FASTQ reverse file (for now local)
+
+required:
+  - isolates
+  - fq1

@@ -1,0 +1,2 @@
+# Indicate the local path to the samples table in a tabular format
+samples: config/demo.tsv

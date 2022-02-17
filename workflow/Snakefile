@@ -1,4 +1,15 @@
-# Main entrypoint of the workflow. 
-# Please follow the best practices: 
-# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there. 
+from snakemake.utils import min_version
+
+#### set minimum snakemake version #####
+min_version("6.15.5")
+
+##### setup report #####
+configfile: "config/config.yaml"
+
+##### load rules #####
+include: "rules/common.smk"
+
+##### target rules #####
+rule all:
+    input:
+        expand("results/{isolate}.fasta", isolate=samples.index),
