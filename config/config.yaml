@@ -3,3 +3,6 @@ samples: config/demo.tsv
 
 # Indicate the path to the Illumina adapters to be removed during the trimming
 adapters: resources/NexteraPE-PE.fa
+
+# The threads number to be used for parallelisation
+threads: 2

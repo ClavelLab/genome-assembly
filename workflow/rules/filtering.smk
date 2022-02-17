@@ -9,15 +9,18 @@ rule remove_adaptater_filter_length:
     log:
         "logs/remove_adaptater/{isolate}.log",
     conda:
-        "envs/trimmomatic.yaml"
+        "../envs/trimmomatic.yaml"
+    threads:
+        config["threads"],
     params:
         illumina_clip=config["adapters"],
         extra="LEADING:3 TRAILING:3 SLIDINGWINDOW:5:20 MINLEN:50",
     shell:
         """
-        trimmomatic PE -phred33 {input.r1} {input.r2} \
+        trimmomatic PE -threads {threads} -phred33 \
+        {input.r1} {input.r2} \
         {output.r1} {output.r1_unpaired} \
         {output.r2} {output.r2_unpaired} \
         ILLUMINACLIP:{params.illumina_clip}:2:30:10 \
-        {params.extra}
+        {params.extra} &> {log}
         """

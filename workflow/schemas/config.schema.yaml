@@ -9,6 +9,8 @@ properties:
           type: string
     adapters:
           type: string
+    threads:
+          type: integer
 
 required:
   - samples
