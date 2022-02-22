@@ -37,9 +37,6 @@ rule remove_phix:
             "results/trimmed/{isolate}.1.phix.fastq",
             "results/trimmed/pe/{isolate}.2.phix.fastq",
         ],
-        #singleton="trimmed/pe/{isolate}.single.fastq",
-        #discarded="trimmed/pe/{isolate}.discarded.fastq",
-        #stats="trimmed/pe/{isolate}.stats.txt",
     log:
         "logs/remove_phix/{isolate}.log",
     params:
