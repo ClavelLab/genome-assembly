@@ -5,6 +5,7 @@
     - [x] multiple genomes
 - [ ] Set the necessary adaptater FASTA files depending on the technology (NextSeq or MiSeq) or allow detection from filename
 - [ ] The adapter files can be downloaded from the [trimmomatic repository](https://github.com/timflutre/trimmomatic/tree/master/adapters) and the PhiX genome (`NC_001422.1`) as well to enable full reproducibility
+- [ ] SPAdes provide flags for `--careful` or `--isolate` analysis that could be considered depending on the quality of the assembly.
 
 ## Reporting and quality control
 
