@@ -39,7 +39,7 @@ Listed in the reverse order because it is easier for Snakemake design. The subse
 - [ ] BAM/SAM management with samtools (v0.1.19). Snakemake wrapper available (1.10)
 - [ ] Alignement of reads on the assembly graph with bwa mem (v0.7.5). Snakemake wrapper available (0.7.17)
 - [ ] Indexing of the assembly graph with bwa (v0.7.5). Snakemake wrapper available (0.7.17)
-- [ ] Convert the assembly graph in FASTA with `make_fasta_from_fastg` from Recycler (0.62). Available in bioconda (0.7-3)
+- [x] Convert the assembly graph in FASTA with `make_fasta_from_fastg` from Recycler (0.62). Available in bioconda (0.7-3)
 - [x] Plasmid reconstruction with plasmidspades (v3.13.1). Snakemake wrapper only for metaspades. Available in bioconda (3.15.3)
 
 ### Quality filtering 

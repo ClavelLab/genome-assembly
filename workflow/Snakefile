@@ -17,4 +17,7 @@ include: "rules/plasmid_reconstruction.smk"
 ##### target rules #####
 rule all:
     input:
-        expand("results/{isolate}.fasta", isolate=samples["isolate"]),
+        expand(
+            "results/plasmid_reconstruction/{isolate}/{isolate}_assembly_graph.nodes.fasta",
+            isolate=samples["isolate"],
+        ),
