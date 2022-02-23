@@ -17,7 +17,7 @@ rule plasmid_reconstruction:
         """
 
 
-rule extract_assembly_graph:
+rule extract_plasmid_assembly_graph:
     input:
         "results/plasmid_reconstruction/{isolate}/assembly_graph.fastg",
     output:

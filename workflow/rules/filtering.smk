@@ -1,4 +1,4 @@
-rule remove_adaptater_filter_length:
+rule remove_adapters_filter_length:
     input:
         unpack(get_fastqs),
     output:
