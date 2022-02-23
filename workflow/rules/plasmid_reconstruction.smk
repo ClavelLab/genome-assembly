@@ -66,11 +66,53 @@ rule align_plasmid_assembly_graph:
         ),
     output:
         "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe.bam",
+    log:
+        "logs/plasmid_reconstruction/{isolate}_align_assembly_graph.log",
     params:
         # No sorting. But defaults include header and compressed BAM
         sorting="none",
     threads: config["threads"]
-    log:
-        "logs/plasmid_reconstruction/{isolate}_align_assembly_graph.log",
     wrapper:
         "v1.2.0/bio/bwa/mem"
+
+
+rule select_primary_alignment:
+    input:
+        "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe.bam",
+    output:
+        bam=pipe(
+            "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.bam"
+        ),
+    log:
+        "logs/plasmid_reconstruction/{isolate}_select_primary_aligment.log",
+    params:
+        extra="-bF 0x0800",  # remove supplementary alignments
+    threads: config["threads"]
+    wrapper:
+        "v1.2.0/bio/samtools/view"
+
+
+rule sort_primary_alignment:
+    input:
+        "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.bam",
+    output:
+        pipe(
+            "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam"
+        ),
+    log:
+        "logs/plasmid_reconstruction/{isolate}_sort_primary_aligment.log",
+    threads: config["threads"]
+    wrapper:
+        "v1.2.0/bio/samtools/sort"
+
+
+rule index_primary_alignment:
+    input:
+        "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam",
+    output:
+        "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam.bai",
+    log:
+        "logs/plasmid_reconstruction/{isolate}_index_primary_aligment.log",
+    threads: config["threads"]
+    wrapper:
+        "v1.2.0/bio/samtools/index"
