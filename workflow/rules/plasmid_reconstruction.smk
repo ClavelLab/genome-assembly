@@ -96,9 +96,7 @@ rule sort_primary_alignment:
     input:
         "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.bam",
     output:
-        pipe(
-            "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam"
-        ),
+        "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam",
     log:
         "logs/plasmid_reconstruction/{isolate}_sort_primary_aligment.log",
     threads: config["threads"]
@@ -116,3 +114,45 @@ rule index_primary_alignment:
     threads: config["threads"]
     wrapper:
         "v1.2.0/bio/samtools/index"
+
+
+rule plasmid_extraction:
+    input:
+        graph="results/plasmid_reconstruction/{isolate}/assembly_graph.fastg",
+        bam="results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam",
+        index="results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam.bai",
+    output:
+        "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
+    log:
+        "logs/plasmid_reconstruction/{isolate}_plasmid_extraction.log",
+    params:
+        max_kmer_length=55,
+    conda:
+        "../envs/recycler.yaml"
+    threads: config["threads"]
+    shell:
+        """
+        recycle.py -g {input.graph} -b {input.bam} \
+            -k {params.max_kmer_length} &> {log}
+        """
+
+
+rule remove_plasmid_from_reads:
+    input:
+        sample=[
+            "results/trimmed/{isolate}.1.phix.fastq",
+            "results/trimmed/pe/{isolate}.2.phix.fastq",
+        ],
+        adapters="results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
+    output:
+        trimmed=[
+            "results/trimmed/{isolate}.1.phix.noplasmid.fastq",
+            "results/trimmed/pe/{isolate}.2.phix.noplasmid.fastq",
+        ],
+    log:
+        "logs/plasmid_reconstruction/{isolate}_remove_plasmid_from_reads.log",
+    params:
+        extra=lambda w, input: "ref={} k=31 hdist=1".format(input.adapters),
+    threads: config["threads"]
+    wrapper:
+        "v1.1.0/bio/bbtools/bbduk"
