@@ -18,6 +18,6 @@ include: "rules/plasmid_reconstruction.smk"
 rule all:
     input:
         expand(
-            "results/plasmid_reconstruction/{isolate}/{isolate}_assembly_graph.nodes.fasta",
+            "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe.bam",
             isolate=samples["isolate"],
         ),
