@@ -52,7 +52,7 @@ rule index_plasmid_assembly_graph:
 
 rule align_plasmid_assembly_graph:
     input:
-        read=[
+        reads=[
             "results/trimmed/{isolate}.1.phix.fastq",
             "results/trimmed/pe/{isolate}.2.phix.fastq",
         ],
@@ -68,7 +68,8 @@ rule align_plasmid_assembly_graph:
         "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe.bam",
     params:
         # No sorting. But defaults include header and compressed BAM
-        sort == "none",
+        sorting="none",
+    threads: config["threads"]
     log:
         "logs/plasmid_reconstruction/{isolate}_align_assembly_graph.log",
     wrapper:
