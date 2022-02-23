@@ -6,6 +6,8 @@
 - [ ] Set the necessary adaptater FASTA files depending on the technology (NextSeq or MiSeq) or allow detection from filename
 - [ ] The adapter files can be downloaded from the [trimmomatic repository](https://github.com/timflutre/trimmomatic/tree/master/adapters) and the PhiX genome (`NC_001422.1`) as well to enable full reproducibility
 - [ ] SPAdes provide an alternative flag to `--careful` that is `--isolate` (introduced in 3.14.0) that [could be used](https://github.com/ablab/spades/blob/spades_3.15.4/README.md#sec3.2) for high-coverage (100x) isolate genome. Note that there is no one-size-fits-all as [always](https://github.com/ablab/spades/issues/600)
+- [ ] Same for recycler with a `-i True` for isolate
+- [ ] **Adjust the maximum length of the kmer required by recycler based on the SPAdes output**
 
 ## Reporting and quality control
 
@@ -27,11 +29,11 @@ Listed in the reverse order because it is easier for Snakemake design. The subse
 ### File management
 
 - [ ] Generate genome FASTA file only
-- [ ] Generate genome FASTA with plasmids if present (consider snakemake checkpoints for evaluation of condition)
+- [x] Generate genome FASTA with plasmids if present (consider snakemake checkpoints for evaluation of condition)
 
 ### Genome assembly
 
-- [ ] Assemble with spades (v3.13.1). Snakemake wrapper only for metaspades. Available in bioconda (3.15.3)
+- [x] Assemble with spades (v3.13.1). Snakemake wrapper only for metaspades. Available in bioconda (3.15.3)
 
 ### Plasmid reconstruction
 

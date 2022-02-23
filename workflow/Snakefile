@@ -18,6 +18,7 @@ include: "rules/plasmid_reconstruction.smk"
 rule all:
     input:
         expand(
-            "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe.bam",
+            "results/{isolate}.genome.fa",
+            "results/{isolate}.plasmids.fa",
             isolate=samples["isolate"],
         ),
