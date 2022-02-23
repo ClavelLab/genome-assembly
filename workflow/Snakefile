@@ -12,13 +12,14 @@ configfile: "config/config.yaml"
 include: "rules/common.smk"
 include: "rules/filtering.smk"
 include: "rules/plasmid_reconstruction.smk"
+include: "rules/assembly.smk"
 
 
 ##### target rules #####
 rule all:
     input:
         expand(
-            "results/{isolate}.genome.fa",
-            "results/{isolate}.plasmids.fa",
+            "results/{isolate}.{genomic_type}.fa",
             isolate=samples["isolate"],
+            genomic_type=["genome", "plasmids"],
         ),
