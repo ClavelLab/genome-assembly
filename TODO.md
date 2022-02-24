@@ -12,7 +12,7 @@
 ## Reporting and quality control
 
 - [ ] Include a report rule
-- [ ] Assess assembly quality with checkM. Available in bioconda (1.1.3)
+- [x] Assess assembly quality with checkM. Available in bioconda (1.1.3)
 - [ ] Compile assembly stats with Tom Hitch script from his github. Possibly use the `github()` directive and/or the auxiliary source files
 
 ### Alternatives to quality control

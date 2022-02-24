@@ -13,6 +13,7 @@ include: "rules/common.smk"
 include: "rules/filtering.smk"
 include: "rules/plasmid_reconstruction.smk"
 include: "rules/assembly.smk"
+include: "rules/quality_check.smk"
 
 
 ##### target rules #####
@@ -23,3 +24,4 @@ rule all:
             isolate=samples["isolate"],
             genomic_type=["genome", "plasmids"],
         ),
+        "results/quality_check/checkm.tsv",
