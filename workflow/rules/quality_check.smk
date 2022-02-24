@@ -16,7 +16,7 @@ rule checkM_for_quality:
         """
         checkm lineage_wf --reduced_tree \
         --extension fa \
-        --tab_file --file {output} \
+        --tab_table --file {output} \
         --threads {threads} \
         results/ \
         results/quality_check/checkm/

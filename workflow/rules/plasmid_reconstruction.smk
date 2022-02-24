@@ -1,7 +1,7 @@
 rule plasmid_reconstruction:
     input:
         "results/trimmed/{isolate}.1.phix.fastq",
-        "results/trimmed/pe/{isolate}.2.phix.fastq",
+        "results/trimmed/{isolate}.2.phix.fastq",
     output:
         "results/plasmid_reconstruction/{isolate}/assembly_graph.fastg",
     log:
@@ -54,7 +54,7 @@ rule align_plasmid_assembly_graph:
     input:
         reads=[
             "results/trimmed/{isolate}.1.phix.fastq",
-            "results/trimmed/pe/{isolate}.2.phix.fastq",
+            "results/trimmed/{isolate}.2.phix.fastq",
         ],
         idx=multiext(
             "results/plasmid_reconstruction/{isolate}/{isolate}_assembly_graph.nodes.fasta",
@@ -141,13 +141,13 @@ rule remove_plasmid_from_reads:
     input:
         sample=[
             "results/trimmed/{isolate}.1.phix.fastq",
-            "results/trimmed/pe/{isolate}.2.phix.fastq",
+            "results/trimmed/{isolate}.2.phix.fastq",
         ],
         adapters="results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
     output:
         trimmed=[
             "results/trimmed/{isolate}.1.phix.noplasmid.fastq",
-            "results/trimmed/pe/{isolate}.2.phix.noplasmid.fastq",
+            "results/trimmed/{isolate}.2.phix.noplasmid.fastq",
         ],
     log:
         "logs/plasmid_reconstruction/{isolate}_remove_plasmid_from_reads.log",

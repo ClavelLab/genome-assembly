@@ -1,7 +1,7 @@
 rule assemble_after_plasmid:
     input:
         "results/trimmed/{isolate}.1.phix.noplasmid.fastq",
-        "results/trimmed/pe/{isolate}.2.phix.noplasmid.fastq",
+        "results/trimmed/{isolate}.2.phix.noplasmid.fastq",
     output:
         "results/assembly/{isolate}/contigs.fasta",
     log:

@@ -35,7 +35,7 @@ rule remove_phix:
     output:
         trimmed=[
             "results/trimmed/{isolate}.1.phix.fastq",
-            "results/trimmed/pe/{isolate}.2.phix.fastq",
+            "results/trimmed/{isolate}.2.phix.fastq",
         ],
     log:
         "logs/remove_phix/{isolate}.log",
