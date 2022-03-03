@@ -87,7 +87,7 @@ rule select_primary_alignment:
         "logs/plasmid_reconstruction/{isolate}_select_primary_aligment.log",
     params:
         extra="-bF 0x0800",  # remove supplementary alignments
-    threads: config["threads"]
+    threads: 0.5 * config["threads"]
     wrapper:
         "v1.2.0/bio/samtools/view"
 
@@ -99,7 +99,7 @@ rule sort_primary_alignment:
         "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam",
     log:
         "logs/plasmid_reconstruction/{isolate}_sort_primary_aligment.log",
-    threads: config["threads"]
+    threads: 0.5 * config["threads"]
     wrapper:
         "v1.2.0/bio/samtools/sort"
 

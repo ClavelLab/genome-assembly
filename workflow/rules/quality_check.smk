@@ -19,5 +19,5 @@ rule checkM_for_quality:
         --tab_table --file {output} \
         --threads {threads} \
         results/ \
-        results/quality_check/checkm/
+        results/quality_check/checkm/ &> {log}
         """
