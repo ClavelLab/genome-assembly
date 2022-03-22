@@ -344,6 +344,7 @@ rule assembly_basepairs_metrics:
         """
 
 
+<<<<<<< HEAD
 rule write_coverage_and_metrics:
     input:
         raw="results/quality_check/{isolate}/metrics/{isolate}.raw_sequence.tsv",
@@ -413,6 +414,6 @@ rule write_summary_table:
     log:
         "logs/quality_check/{isolate}_summary_table.log",
     conda:
-        "../envs/pandas.yaml"
-    script:
-        "../scripts/write_summary_table.py"
+        "../envs/notebook.yaml"
+    notebook:
+        "notebooks/quality.r.ipynb"

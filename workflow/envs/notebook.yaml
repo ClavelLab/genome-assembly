@@ -1,0 +1,10 @@
+channels:
+    - bioconda
+    - conda-forge
+dependencies:
+    - python
+    - jupyter
+    - jupyterlab_code_formatter
+    - r-irkernel
+    - pandas
+
