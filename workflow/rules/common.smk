@@ -1,4 +1,5 @@
 import pandas as pd
+import yaml as yaml
 from snakemake.utils import validate
 
 validate(config, schema="../schemas/config.schema.yaml")

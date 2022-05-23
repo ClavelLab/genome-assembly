@@ -7,7 +7,7 @@
 - [ ] The adapter files can be downloaded from the [trimmomatic repository](https://github.com/timflutre/trimmomatic/tree/master/adapters) and the PhiX genome (`NC_001422.1`) as well to enable full reproducibility
 - [ ] SPAdes provide an alternative flag to `--careful` that is `--isolate` (introduced in 3.14.0) that [could be used](https://github.com/ablab/spades/blob/spades_3.15.4/README.md#sec3.2) for high-coverage (100x) isolate genome. Note that there is no one-size-fits-all as [always](https://github.com/ablab/spades/issues/600)
 - [ ] Same for recycler with a `-i True` for isolate
-- [ ] **Adjust the maximum length of the kmer required by recycler based on the SPAdes output**
+- [x] **Adjust the maximum length of the kmer required by recycler based on the SPAdes output**
 
 ## Reporting and quality control
 

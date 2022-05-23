@@ -1,9 +1,10 @@
-rule plasmid_reconstruction:
+checkpoint plasmid_reconstruction:
     input:
         "results/trimmed/{isolate}.1.phix.fastq",
         "results/trimmed/{isolate}.2.phix.fastq",
     output:
         "results/plasmid_reconstruction/{isolate}/assembly_graph.fastg",
+        "results/plasmid_reconstruction/{isolate}/run_spades.yaml",
     log:
         "logs/plasmid_reconstruction/{isolate}_plasmid_reconstruction.log",
     conda:
@@ -116,6 +117,23 @@ rule index_primary_alignment:
         "v1.2.0/bio/samtools/index"
 
 
+def guess_longest_kmer(wildcards):
+    # Fetch the automatically generated spades configuration file
+    spades_conf = checkpoints.plasmid_reconstruction.get(**wildcards).output[1]
+    with open(spades_conf, "r") as spades_file:
+        # Load as a YAML each of the steps of the analysis
+        spades_yaml = yaml.safe_load(spades_file)
+
+    # Extract the steps named after the kmer lengths: K21, K33, K55 etc.
+    kmers = [step["STAGE"] for step in spades_yaml if step["STAGE"][0] == "K"]
+    # Remove the first character and convert the string to integer
+    lengths = [int(x[1:]) for x in kmers]
+    # Sort descending order
+    lengths.sort(reverse=True)
+    # Get the longest
+    return lengths[0]
+
+
 rule plasmid_extraction:
     input:
         graph="results/plasmid_reconstruction/{isolate}/assembly_graph.fastg",
@@ -126,7 +144,7 @@ rule plasmid_extraction:
     log:
         "logs/plasmid_reconstruction/{isolate}_plasmid_extraction.log",
     params:
-        max_kmer_length=55,
+        max_kmer_length=guess_longest_kmer,
     conda:
         "../envs/recycler.yaml"
     threads: config["threads"]
