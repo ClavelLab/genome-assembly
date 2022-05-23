@@ -11,15 +11,15 @@
 
 ## Reporting and quality control
 
+- [x] Assess completeness and contamination with checkM. Available in bioconda (1.1.3)
+- [ ] Annotate genome with Bakta (5S extraction)
+- [ ] Extract the LSU (23S) and SSU (16S) with metaxa2
+- [ ] Assess contamination with GUNC or MDMcleaner
+- [ ] Compute basepairs statistics and coverage with seqkit
+- [ ] Compute the numbers of contigs below 1kb and remove with seqkit
+- [ ] Compute assembly statistics with QUAST
+- [ ] Extract above statistics to produce a standard compliant table
 - [ ] Include a report rule
-- [x] Assess assembly quality with checkM. Available in bioconda (1.1.3)
-- [ ] Compile assembly stats with Tom Hitch script from his github. Possibly use the `github()` directive and/or the auxiliary source files
-
-### Alternatives to quality control
-
-- [ ] Assess assembly quality with BUSCO (contamination from euk; more efficient?). Available in bioconda (5.2.2)
-- [ ] Assess assembly quality with Merqury 
-- [ ] Assess assembly quality with GUNC that can be combined natively with checkM to provide uncluttered genomes 
 
 
 ## Convert the SOP steps into a Snakemake workflow
