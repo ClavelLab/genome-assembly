@@ -113,13 +113,15 @@ rule check_SSU:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
-        fasta="SSU-{isolate}.extraction.fasta",
-        results="SSU-{isolate}.extraction.results",
+        fasta=pipe("SSU-{isolate}.extraction.fasta"),
+        results=pipe("SSU-{isolate}.extraction.results"),
     log:
         "logs/quality_check/{isolate}_check_SSU.log",
     conda:
         "../envs/metaxa2.yaml"
     threads: config["threads"]
+    group:
+        "SSU"
     shell:
         """
         metaxa2_x -i {input} \
@@ -137,9 +139,12 @@ rule move_SSU_sequence:
         "results/quality_check/{isolate}/{isolate}.SSU.fa",
     conda:
         "../envs/seqkit.yaml"
+    threads: 1
+    group:
+        "SSU"
     shell:
         """
-        seqkit replace -p 'NODE' -r '{wildcards.isolate} SSU NODE' --line-width 0 {input} > {output}
+        seqkit replace -p 'NODE' -r '{wildcards.isolate} SSU NODE' --line-width 0 --threads {threads} {input} > {output}
         """
 
 
@@ -148,13 +153,15 @@ rule check_LSU:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
-        fasta="LSU-{isolate}.extraction.fasta",
-        results="LSU-{isolate}.extraction.results",
+        fasta=pipe("LSU-{isolate}.extraction.fasta"),
+        results=pipe("LSU-{isolate}.extraction.results"),
     log:
         "logs/quality_check/{isolate}_check_LSU.log",
     conda:
         "../envs/metaxa2.yaml"
     threads: config["threads"]
+    group:
+        "LSU"
     shell:
         """
         metaxa2_x -i {input} \
@@ -172,9 +179,12 @@ rule move_LSU_sequence:
         "results/quality_check/{isolate}/{isolate}.LSU.fa",
     conda:
         "../envs/seqkit.yaml"
+    threads: 1
+    group:
+        "LSU"
     shell:
         """
-        seqkit replace -p 'NODE' -r '{wildcards.isolate} LSU NODE' --line-width 0 {input} > {output}
+        seqkit replace -p 'NODE' -r '{wildcards.isolate} LSU NODE' --line-width 0 --threads {threads} {input} > {output}
         """
 
 
