@@ -69,3 +69,40 @@ rule bakta_for_annotation:
         --output {output} \
         --threads {threads} {input} &> {log}
         """
+
+
+rule check_tRNAs_5S:
+    input:
+        "results/quality_check/{isolate}/bakta/{isolate}.tsv",
+    output:
+        summary="results/quality_check/{isolate}/bakta/{isolate}.tRNAs-5S.csv",
+        details="results/quality_check/{isolate}/bakta/{isolate}.tRNAs-5S.details.csv",
+    log:
+        "logs/quality_check/{isolate}_check_tRNAs_5S.log",
+    conda:
+        "../envs/pandas.yaml"
+    params:
+        tRNAs=[
+            "Ala",
+            "Arg",
+            "Asn",
+            "Asp",
+            "Cys",
+            "Gln",
+            "Glu",
+            "Gly",
+            "His",
+            "Ile",
+            "Leu",
+            "Lys",
+            "Met",
+            "Phe",
+            "Pro",
+            "Ser",
+            "Thr",
+            "Trp",
+            "Tyr",
+            "Val",
+        ],
+    script:
+        "../scripts/check_tRNAs_5S.py"
