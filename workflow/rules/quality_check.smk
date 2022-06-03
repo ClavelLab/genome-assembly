@@ -1,3 +1,19 @@
+rule remove_small_contigs:
+    input:
+        "results/assembly/{isolate}/contigs.fasta",
+    output:
+        "results/quality_check/{isolate}.genome.fa",
+    log:
+        "logs/quality_check/{isolate}_remove_small_contigs.log",
+    conda:
+        "../envs/seqkit.yaml"
+    threads: config["threads"]
+    shell:
+        """
+        seqkit seq --remove-gaps --min-len 1000 --threads {threads} {input} 1> {output} 2> {log}
+        """
+
+
 rule checkM_for_quality:
     input:
         expand(

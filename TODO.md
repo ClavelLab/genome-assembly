@@ -11,12 +11,12 @@
 
 ## Reporting and quality control
 
-- [x] Assess completeness and contamination with checkM. Available in bioconda (1.1.3)
+- [x] Compute the numbers of contigs below 1kb and remove with seqkit
+- [x] Assess completeness and contamination with checkM, but remove the plasmid check. Available in bioconda (1.1.3)
 - [ ] Annotate genome with Bakta (5S extraction)
 - [ ] Extract the LSU (23S) and SSU (16S) with metaxa2
 - [ ] Assess contamination with GUNC or MDMcleaner
 - [ ] Compute basepairs statistics and coverage with seqkit
-- [ ] Compute the numbers of contigs below 1kb and remove with seqkit
 - [ ] Compute assembly statistics with QUAST
 - [ ] Extract above statistics to produce a standard compliant table
 - [ ] Include a report rule

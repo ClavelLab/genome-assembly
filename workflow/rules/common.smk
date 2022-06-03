@@ -13,13 +13,13 @@ def get_fastqs(wildcards):
     return dict(zip(["r1", "r2"], samples.loc[wildcards.isolate, ["fq1", "fq2"]]))
 
 
-rule rename_genome_fasta:
-    input:
-        "results/assembly/{isolate}/contigs.fasta",
-    output:
-        "results/{isolate}.genome.fa",
-    shell:
-        "mv {input} {output}"
+# rule rename_genome_fasta:
+#    input:
+#        "results/assembly/{isolate}/contigs.fasta",
+#    output:
+#        "results/{isolate}.genome.fa",
+#    shell:
+#        "mv {input} {output}"
 
 
 rule rename_plasmid_fasta:
