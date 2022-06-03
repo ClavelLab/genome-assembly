@@ -2,7 +2,7 @@ rule remove_small_contigs:
     input:
         "results/assembly/{isolate}/contigs.fasta",
     output:
-        "results/quality_check/{isolate}.genome.fa",
+        "results/quality_check/{isolate}/{isolate}.genome.fa",
     log:
         "logs/quality_check/{isolate}_remove_small_contigs.log",
     conda:
@@ -16,24 +16,22 @@ rule remove_small_contigs:
 
 rule checkM_for_quality:
     input:
-        expand(
-            "results/{isolate}.{genomic_type}.fa",
-            isolate=samples["isolate"],
-            genomic_type=["genome", "plasmids"],
-        ),
+        "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
-        "results/quality_check/checkm.tsv",
+        "results/quality_check/{isolate}/{isolate}_checkm.tsv",
     log:
-        "logs/quality_check/checkm.log",
+        "logs/quality_check/{isolate}_checkm.log",
+    params:
+        flag="--reduced_tree" if config["reduced_tree"] else "",
     conda:
         "../envs/checkm.yaml"
     threads: config["threads"]
     shell:
         """
-        checkm lineage_wf --reduced_tree \
+        checkm lineage_wf {params.flag} \
         --extension fa \
         --tab_table --file {output} \
         --threads {threads} \
-        results/ \
-        results/quality_check/checkm/ &> {log}
+        results/quality_check/{wildcards.isolate}/ \
+        results/quality_check/{wildcards.isolate}/checkm/ &> {log}
         """

@@ -1,5 +1,5 @@
 # Indicate the local path to the samples table in a tabular format
-samples: config/demo.tsv
+samples: config/er2.tsv
 
 # Indicate the path to the Illumina adapters and the PhiX genome
 # to be removed during the trimming
@@ -7,7 +7,7 @@ adapters: resources/NexteraPE-PE.fa
 phix: resources/phix.fasta
 
 # The threads number to be used for parallelisation
-threads: 2
+threads: 9
 
 # Use a reduced tree (~14Gb of RAM) for CheckM instead of the default (~40Gb of RAM)
 reduced_tree: true
