@@ -15,7 +15,7 @@ trnas = {x: annotations_trnas['Gene'].str.count(x+'_trna').sum() for x in snakem
 how_many = sum([trnas[x]>0 for x in trnas.keys()])
 
 # Count how many 5S rRNA genes are predicted
-five_s = annotations['Gene'].str.count('5S_rrna').sum()
+five_s = int(annotations['Gene'].str.count('5S_rrna').sum())
 
 # Export the detailed counts of tRNAs and 5S as a dataframe
 detailled_df = pd.merge(
