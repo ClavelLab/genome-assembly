@@ -3,7 +3,7 @@
 - [ ] Set a flexible configuration file to be able to assemble:
     - [ ] one genome 
     - [x] multiple genomes
-- [ ] Set the necessary adaptater FASTA files depending on the technology (NextSeq or MiSeq) or allow detection from filename
+- [ ] Set the necessary adapter FASTA files depending on the technology (NextSeq or MiSeq) or allow detection from filename
 - [ ] The adapter files can be downloaded from the [trimmomatic repository](https://github.com/timflutre/trimmomatic/tree/master/adapters) and the PhiX genome (`NC_001422.1`) as well to enable full reproducibility
 - [ ] SPAdes provide an alternative flag to `--careful` that is `--isolate` (introduced in 3.14.0) that [could be used](https://github.com/ablab/spades/blob/spades_3.15.4/README.md#sec3.2) for high-coverage (100x) isolate genome. Note that there is no one-size-fits-all as [always](https://github.com/ablab/spades/issues/600)
 - [ ] Same for recycler with a `-i True` for isolate
@@ -48,5 +48,5 @@ Listed in the reverse order because it is easier for Snakemake design. The subse
 ### Quality filtering 
 
 - [x] Remove phiX sequences from reads with bbduk included in the bbmap (v38.84). Snakemake wrapper available
-- [x] Remove adaptaters and filter length with trimmomatic (v0.39). Snakemake wrapper available but older (0.36) so bioconda.
+- [x] Remove adapters and filter length with trimmomatic (v0.39). Snakemake wrapper available but older (0.36) so bioconda.
  

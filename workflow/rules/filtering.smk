@@ -7,7 +7,7 @@ rule remove_adapters_filter_length:
         r1_unpaired="results/trimmed/{isolate}.1.unpaired.fastq",
         r2_unpaired="results/trimmed/{isolate}.2.unpaired.fastq",
     log:
-        "logs/remove_adaptater/{isolate}.log",
+        "logs/remove_adapters/{isolate}.log",
     conda:
         "../envs/trimmomatic.yaml"
     threads: config["threads"]
