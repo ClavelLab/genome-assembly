@@ -106,3 +106,87 @@ rule check_tRNAs_5S:
         ],
     script:
         "../scripts/check_tRNAs_5S.py"
+
+
+rule check_SSU:
+    # SSU: 16S (BactArch) 18S (Euk)
+    input:
+        "results/quality_check/{isolate}/{isolate}.genome.fa",
+    output:
+        fasta="SSU-{isolate}.extraction.fasta",
+        results="SSU-{isolate}.extraction.results",
+    log:
+        "logs/quality_check/{isolate}_check_SSU.log",
+    conda:
+        "../envs/metaxa2.yaml"
+    threads: config["threads"]
+    shell:
+        """
+        metaxa2_x -i {input} \
+            -o SSU-{wildcards.isolate} -f fasta \
+            -g ssu --mode genome \
+            --table F --fasta T --graphical F --summary F \
+            --cpu {threads} &> {log}
+        """
+
+
+rule move_SSU_sequence:
+    input:
+        "SSU-{isolate}.extraction.fasta",
+    output:
+        "results/quality_check/{isolate}/{isolate}.SSU.fa",
+    conda:
+        "../envs/seqkit.yaml"
+    shell:
+        """
+        seqkit replace -p 'NODE' -r '{wildcards.isolate} SSU NODE' --line-width 0 {input} > {output}
+        """
+
+
+rule check_LSU:
+    # LSU: 23 (BactArch) 5.8 & 28S (Euk)
+    input:
+        "results/quality_check/{isolate}/{isolate}.genome.fa",
+    output:
+        fasta="LSU-{isolate}.extraction.fasta",
+        results="LSU-{isolate}.extraction.results",
+    log:
+        "logs/quality_check/{isolate}_check_LSU.log",
+    conda:
+        "../envs/metaxa2.yaml"
+    threads: config["threads"]
+    shell:
+        """
+        metaxa2_x -i {input} \
+            -o LSU-{wildcards.isolate} -f fasta \
+            -g lsu --mode genome \
+            --table F --fasta T --graphical F --summary F \
+            --cpu {threads} &> {log}
+        """
+
+
+rule move_LSU_sequence:
+    input:
+        "LSU-{isolate}.extraction.fasta",
+    output:
+        "results/quality_check/{isolate}/{isolate}.LSU.fa",
+    conda:
+        "../envs/seqkit.yaml"
+    shell:
+        """
+        seqkit replace -p 'NODE' -r '{wildcards.isolate} LSU NODE' --line-width 0 {input} > {output}
+        """
+
+
+rule aggregate_SSU_LSU_results:
+    input:
+        SSU="SSU-{isolate}.extraction.results",
+        LSU="LSU-{isolate}.extraction.results",
+    output:
+        wd=directory("results/quality_check/{isolate}/metaxa"),
+        summary="results/quality_check/{isolate}/metaxa/{isolate}.SSU-LSU.csv",
+    shell:
+        """
+        cut -f 6 {input} > {output.summary}
+        mv -t {output.wd} {input}
+        """
