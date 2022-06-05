@@ -113,8 +113,8 @@ rule check_SSU:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
-        fasta=pipe("SSU-{isolate}.extraction.fasta"),
-        results=pipe("SSU-{isolate}.extraction.results"),
+        fasta=temp("SSU-{isolate}.extraction.fasta"),
+        results=temp("SSU-{isolate}.extraction.results"),
     log:
         "logs/quality_check/{isolate}_check_SSU.log",
     conda:
@@ -153,8 +153,8 @@ rule check_LSU:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
-        fasta=pipe("LSU-{isolate}.extraction.fasta"),
-        results=pipe("LSU-{isolate}.extraction.results"),
+        fasta=temp("LSU-{isolate}.extraction.fasta"),
+        results=temp("LSU-{isolate}.extraction.results"),
     log:
         "logs/quality_check/{isolate}_check_LSU.log",
     conda:
@@ -197,6 +197,6 @@ rule aggregate_SSU_LSU_results:
         summary="results/quality_check/{isolate}/metaxa/{isolate}.SSU-LSU.csv",
     shell:
         """
-        cut -f 6 {input} > {output.summary}
+        cut -f 6 {input.SSU} {input.LSU} > {output.summary}
         mv -t {output.wd} {input}
         """
