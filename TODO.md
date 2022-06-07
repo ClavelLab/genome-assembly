@@ -15,7 +15,7 @@
 - [x] Assess completeness and contamination with checkM, but remove the plasmid check. Available in bioconda (1.1.3)
 - [x] Annotate genome with Bakta (5S extraction)
 - [x] Extract the LSU (23S) and SSU (16S) with metaxa2
-- [ ] Assess contamination with GUNC or MDMcleaner
+- [x] Assess contamination with MDMcleaner
 - [x] Compute basepairs statistics and coverage with seqkit
 - [x] Compute assembly statistics with QUAST
 - [ ] Generate checksums with md5 hash on the gz version of the raw reads and the final genome for deposition on Coscine

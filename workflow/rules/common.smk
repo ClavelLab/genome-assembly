@@ -1,6 +1,10 @@
 import pandas as pd
 import yaml as yaml
+import os
 from snakemake.utils import validate
+from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
+
+HTTP = HTTPRemoteProvider()
 
 validate(config, schema="../schemas/config.schema.yaml")
 

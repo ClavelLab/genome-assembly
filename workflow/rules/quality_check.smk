@@ -218,6 +218,64 @@ rule aggregate_SSU_LSU_results:
         "../scripts/check_LSU_SSU.py"
 
 
+rule download_mdmcleaner_db:
+    input:
+        HTTP.remote(
+            "zenodo.org/record/5698995/files/MDMcleanerDB.tar.bz2", keep_local=False
+        ),
+    output:
+        directory(config["mdmcleaner_db"]),
+    log:
+        "logs/quality_check/download_mdmcleaner_db.log",
+    conda:
+        "../envs/mdmcleaner.yaml"
+    shell:
+        """
+        mkdir -p {output}
+        # change directory before extracting
+        tar -C {output} -xvjf {input} 2>&1 {log}
+        """
+
+
+rule set_mdmcleaner_db:
+    output:
+        "results/quality_check/mdmcleaner.config",
+    log:
+        "logs/quality_check/set_mdmcleaner_db.log",
+    params:
+        db=config["mdmcleaner_db"],
+    conda:
+        "../envs/mdmcleaner.yaml"
+    shell:
+        """
+        mdmcleaner set_configs --db_basedir {params.db}
+        mv mdmcleaner.config {output}
+        """
+
+
+rule mdmcleaner_for_contamination_check:
+    input:
+        genome="results/quality_check/{isolate}/{isolate}.genome.fa",
+        config="results/quality_check/mdmcleaner.config",
+    output:
+        directory("results/quality_check/{isolate}/mdmcleaner/"),
+    log:
+        "logs/quality_check/{isolate}_mdmcleaner.log",
+    params:
+        local_dir="mdmcleaner_{isolate}",
+    conda:
+        "../envs/mdmcleaner.yaml"
+    threads: config["threads"]
+    shell:
+        """
+        mdmcleaner clean --config {input.config} \
+        --input_fastas {input.genome} \
+        --output_folder {params.local_dir} \
+        --threads {threads} &> {log}
+        mv {params.local_dir} {output}
+        """
+
+
 rule basepairs_metrics:
     input:
         unpack(get_fastqs),
