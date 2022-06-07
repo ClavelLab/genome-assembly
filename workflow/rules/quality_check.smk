@@ -188,15 +188,31 @@ rule move_LSU_sequence:
         """
 
 
-rule aggregate_SSU_LSU_results:
+rule move_SSU_LSU_results:
     input:
         SSU="SSU-{isolate}.extraction.results",
         LSU="LSU-{isolate}.extraction.results",
     output:
-        wd=directory("results/quality_check/{isolate}/metaxa"),
-        summary="results/quality_check/{isolate}/metaxa/{isolate}.SSU-LSU.csv",
+        SSU="results/quality_check/{isolate}/metaxa/SSU-{isolate}.extraction.results",
+        LSU="results/quality_check/{isolate}/metaxa/LSU-{isolate}.extraction.results",
     shell:
         """
-        cut -f 6 {input.SSU} {input.LSU} > {output.summary}
-        mv -t {output.wd} {input}
+        mv {input.SSU} {output.SSU}
+        mv {input.LSU} {output.LSU}
         """
+
+
+rule aggregate_SSU_LSU_results:
+    input:
+        SSU="results/quality_check/{isolate}/{isolate}.SSU.fa",
+        LSU="results/quality_check/{isolate}/{isolate}.LSU.fa",
+        results_SSU="results/quality_check/{isolate}/metaxa/SSU-{isolate}.extraction.results",
+        results_LSU="results/quality_check/{isolate}/metaxa/LSU-{isolate}.extraction.results",
+    output:
+        "results/quality_check/{isolate}/metaxa/{isolate}.SSU-LSU.csv",
+    log:
+        "logs/quality_check/{isolate}_aggregate_SSU_LSU.log",
+    conda:
+        "../envs/pandas.yaml"
+    script:
+        "../scripts/check_LSU_SSU.py"
