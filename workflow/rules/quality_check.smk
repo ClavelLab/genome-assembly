@@ -18,7 +18,7 @@ rule checkM_for_quality:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
-        "results/quality_check/{isolate}/{isolate}_checkm.tsv",
+        "results/quality_check/{isolate}/checkm/{isolate}_checkm.tsv",
     log:
         "logs/quality_check/{isolate}_checkm.log",
     params:
