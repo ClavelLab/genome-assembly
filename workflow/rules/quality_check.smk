@@ -216,3 +216,49 @@ rule aggregate_SSU_LSU_results:
         "../envs/pandas.yaml"
     script:
         "../scripts/check_LSU_SSU.py"
+
+
+rule basepairs_metrics:
+    input:
+        unpack(get_fastqs),
+    output:
+        "results/quality_check/{isolate}/metrics/{isolate}.raw_sequence.tsv",
+    log:
+        "logs/quality_check/{isolate}_basepairs_metrics.log",
+    conda:
+        "../envs/seqkit.yaml"
+    threads: config["threads"]
+    shell:
+        """
+        seqkit stats -T --threads {threads} {input} 1> {output} 2> {log}
+        """
+
+
+rule assembly_basepairs_metrics:
+    input:
+        "results/quality_check/{isolate}/{isolate}.genome.fa",
+    output:
+        "results/quality_check/{isolate}/metrics/{isolate}.assembly.tsv",
+    log:
+        "logs/quality_check/{isolate}_assembly_basepairs_metrics.log",
+    conda:
+        "../envs/seqkit.yaml"
+    threads: config["threads"]
+    shell:
+        """
+        seqkit stats -T --threads {threads} {input} 1> {output} 2> {log}
+        """
+
+
+rule write_coverage_and_metrics:
+    input:
+        raw="results/quality_check/{isolate}/metrics/{isolate}.raw_sequence.tsv",
+        assembly="results/quality_check/{isolate}/metrics/{isolate}.assembly.tsv",
+    output:
+        "results/quality_check/{isolate}/metrics/{isolate}.metrics.csv",
+    log:
+        "logs/quality_check/{isolate}_write_coverage_and_metrics.log",
+    conda:
+        "../envs/pandas.yaml"
+    script:
+        "../scripts/write_coverage_and_metrics.py"
