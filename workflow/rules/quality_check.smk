@@ -280,3 +280,20 @@ rule write_coverage_and_metrics:
         "../envs/pandas.yaml"
     script:
         "../scripts/write_coverage_and_metrics.py"
+
+
+rule quast_for_assembly_quality:
+    input:
+        "results/quality_check/{isolate}/{isolate}.genome.fa",
+    output:
+        directory("results/quality_check/{isolate}/quast"),
+    log:
+        "logs/quality_check/{isolate}_quast.log",
+    conda:
+        "../envs/quast.yaml"
+    threads: config["threads"]
+    shell:
+        """
+        quast --threads {threads} --labels "{wildcards.isolate}" \
+        --no-icarus --output-dir {output} {input} > {log}
+        """

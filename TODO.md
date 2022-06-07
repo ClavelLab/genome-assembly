@@ -17,7 +17,7 @@
 - [x] Extract the LSU (23S) and SSU (16S) with metaxa2
 - [ ] Assess contamination with GUNC or MDMcleaner
 - [x] Compute basepairs statistics and coverage with seqkit
-- [ ] Compute assembly statistics with QUAST
+- [x] Compute assembly statistics with QUAST
 - [ ] Extract above statistics to produce a standard compliant table
 - [ ] Include a report rule
 
