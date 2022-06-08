@@ -297,3 +297,16 @@ rule quast_for_assembly_quality:
         quast --threads {threads} --labels "{wildcards.isolate}" \
         --no-icarus --output-dir {output} {input} > {log}
         """
+
+
+rule checksum_raw_fastq:
+    input:
+        unpack(get_fastqs),
+    output:
+        "results/quality_check/{isolate}/checksums/{isolate}_raw_fastq.md5",
+    log:
+        "logs/quality_check/{isolate}_checksum_fastq.log",
+    shell:
+        """
+        md5sum {input} 1> {output} 2> {log}
+        """
