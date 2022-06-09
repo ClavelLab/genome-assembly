@@ -18,7 +18,7 @@
 - [x] Assess contamination with MDMcleaner
 - [x] Compute basepairs statistics and coverage with seqkit
 - [x] Compute assembly statistics with QUAST
-- [ ] Generate checksums with md5 hash on the gz version of the raw reads and the final genome for deposition on Coscine
+- [x] Generate checksums with md5 hash on the gz version of the raw reads and the final genome for deposition on Coscine
 - [ ] Extract above statistics to produce a standard compliant table based on the sample table
 - [ ] Include a report rule
 

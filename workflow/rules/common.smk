@@ -17,19 +17,21 @@ def get_fastqs(wildcards):
     return dict(zip(["r1", "r2"], samples.loc[wildcards.isolate, ["fq1", "fq2"]]))
 
 
-# rule rename_genome_fasta:
-#    input:
-#        "results/assembly/{isolate}/contigs.fasta",
-#    output:
-#        "results/{isolate}.genome.fa",
-#    shell:
-#        "mv {input} {output}"
+rule rename_genome_fasta:
+    input:
+        "results/quality_check/{isolate}/{isolate}.genome.fa",
+    output:
+        "results/genome/{isolate}.genome.fa.gz",
+    shell:
+        "cat {input} | gzip > {output}"
 
 
 rule rename_plasmid_fasta:
     input:
         "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
     output:
-        "results/{isolate}.plasmids.fa",
+        "results/plasmids/{isolate}.plasmids.fa.gz",
     shell:
-        "mv {input} {output}"
+        """
+        cat {input} | gzip > {output}
+        """

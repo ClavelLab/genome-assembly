@@ -383,6 +383,15 @@ rule checksum_raw_fastq:
     log:
         "logs/quality_check/{isolate}_checksum_fastq.log",
     shell:
-        """
-        md5sum {input} 1> {output} 2> {log}
-        """
+        "md5sum {input} 1> {output} 2> {log}"
+
+
+rule checksum_genome:
+    input:
+        "results/genome/{isolate}.genome.fa.gz",
+    output:
+        "results/quality_check/{isolate}/checksums/{isolate}_genome.md5",
+    log:
+        "logs/quality_check/{isolate}_checksum_genome.log",
+    shell:
+        "md5sum {input} 1> {output} 2> {log}"

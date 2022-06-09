@@ -20,8 +20,7 @@ include: "rules/quality_check.smk"
 rule all:
     input:
         expand(
-            "results/{isolate}.{genomic_type}.fa",
+            "results/{genomic_type}/{isolate}.{genomic_type}.fa.gz",
             isolate=samples["isolate"],
             genomic_type=["genome", "plasmids"],
         ),
-        "results/quality_check/checkm.tsv",
