@@ -66,10 +66,10 @@ rule mdmcleaner_for_contamination_check:
     shell:
         """
         cd {output.mdm_dir}
-        mdmcleaner clean --config {input.config} \
-        --input_fastas {input.genome} \
+        mdmcleaner clean --config ../../../../{input.config} \
+        --input_fastas ../../../../{input.genome} \
         --output_folder {params.local_dir} \
-        --threads {threads} &> {log}
+        --threads {threads} &> ../../../../{log}
         cd -
         """
 
