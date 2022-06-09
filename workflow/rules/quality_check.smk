@@ -55,7 +55,7 @@ rule mdmcleaner_for_contamination_check:
         config="results/quality_check/mdmcleaner.config",
     output:
         mdm_dir=directory("results/quality_check/{isolate}/mdmcleaner/"),
-        filtered_contigs="results/quality_check/{isolate}/mdmcleaner/{isolate}.trimmed_filtered_kept_contigs.fasta.gz",
+        filtered_contigs="results/quality_check/{isolate}/mdmcleaner/mdmcleaner_{isolate}/{isolate}.trimmed/{isolate}.trimmed_filtered_kept_contigs.fasta.gz",
     log:
         "logs/quality_check/{isolate}_mdmcleaner.log",
     params:
@@ -65,17 +65,18 @@ rule mdmcleaner_for_contamination_check:
     threads: config["threads"]
     shell:
         """
+        cd {output.mdm_dir}
         mdmcleaner clean --config {input.config} \
         --input_fastas {input.genome} \
         --output_folder {params.local_dir} \
         --threads {threads} &> {log}
-        mv {params.local_dir} {output.mdm_dir}
+        cd -
         """
 
 
 rule rewrite_genome_headers:
     input:
-        "results/quality_check/{isolate}/mdmcleaner/{isolate}.trimmed_filtered_kept_contigs.fasta.gz",
+        "results/quality_check/{isolate}/mdmcleaner/mdmcleaner_{isolate}/{isolate}.trimmed/{isolate}.trimmed_filtered_kept_contigs.fasta.gz",
     output:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     conda:
