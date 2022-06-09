@@ -56,6 +56,7 @@ rule mdmcleaner_for_contamination_check:
     output:
         mdm_dir=directory("results/quality_check/{isolate}/mdmcleaner/"),
         filtered_contigs="results/quality_check/{isolate}/mdmcleaner/mdmcleaner_{isolate}/{isolate}.trimmed/{isolate}.trimmed_filtered_kept_contigs.fasta.gz",
+        table="results/quality_check/{isolate}/mdmcleaner/overview_all_before_cleanup.tsv",
     log:
         "logs/quality_check/{isolate}_mdmcleaner.log",
     params:
@@ -395,3 +396,23 @@ rule checksum_genome:
         "logs/quality_check/{isolate}_checksum_genome.log",
     shell:
         "md5sum {input} 1> {output} 2> {log}"
+
+
+rule write_summary_table:
+    input:
+        samples=config["samples"],
+        metrics="results/quality_check/{isolate}/metrics/{isolate}.metrics.csv",
+        fastq_md5="results/quality_check/{isolate}/checksums/{isolate}_raw_fastq.md5",
+        mdmcleaner="results/quality_check/{isolate}/mdmcleaner/overview_all_before_cleanup.tsv",
+        checkm="results/quality_check/{isolate}/checkm/{isolate}_checkm.tsv",
+        ssu_lsu="results/quality_check/{isolate}/metaxa/{isolate}.SSU-LSU.csv",
+        quast="results/quality_check/{isolate}/quast/report.tsv",
+        genome_md5="results/quality_check/{isolate}/checksums/{isolate}_genome.md5",
+    output:
+        "results/summary/{isolate}.csv",
+    log:
+        "logs/quality_check/{isolate}_summary_table.log",
+    conda:
+        "../envs/pandas.yaml"
+    script:
+        "../scripts/write_summary_table.py"

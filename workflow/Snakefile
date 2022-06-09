@@ -24,3 +24,7 @@ rule all:
             isolate=samples["isolate"],
             genomic_type=["genome", "plasmids"],
         ),
+        expand(
+            "results/summary/{isolate}.csv",
+            isolate=samples["isolate"],
+        ),
