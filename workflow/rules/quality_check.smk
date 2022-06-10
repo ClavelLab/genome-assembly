@@ -344,7 +344,8 @@ rule quast_for_assembly_quality:
         raw_assembly="results/assembly/{isolate}/contigs.fasta",
         final_assembly="results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
-        directory("results/quality_check/{isolate}/quast"),
+        quast_dir=directory("results/quality_check/{isolate}/quast"),
+        report="results/quality_check/{isolate}/quast/transposed_report.tsv",
     log:
         "logs/quality_check/{isolate}_quast.log",
     conda:
@@ -353,7 +354,7 @@ rule quast_for_assembly_quality:
     shell:
         """
         quast --threads {threads} --labels "{wildcards.isolate}.raw,{wildcards.isolate}.final" \
-        --no-icarus --output-dir {output} {input.raw_assembly} {input.final_assembly} > {log}
+        --no-icarus --output-dir {output.quast_dir} {input.raw_assembly} {input.final_assembly} > {log}
         """
 
 
