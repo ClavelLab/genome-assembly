@@ -305,7 +305,7 @@ rule basepairs_metrics:
         """
 
 
-rule trimmed_basepairs_metrics:
+use rule basepairs_metrics as trimmed_basepairs_metrics with:
     input:
         "results/trimmed/{isolate}.1.fastq",
         "results/trimmed/{isolate}.2.fastq",
@@ -313,29 +313,15 @@ rule trimmed_basepairs_metrics:
         "results/quality_check/{isolate}/metrics/{isolate}.trimmed.tsv",
     log:
         "logs/quality_check/{isolate}_trimmed_basepairs_metrics.log",
-    conda:
-        "../envs/seqkit.yaml"
-    threads: config["threads"]
-    shell:
-        """
-        seqkit stats -T --threads {threads} {input} 1> {output} 2> {log}
-        """
 
 
-rule assembly_basepairs_metrics:
+use rule basepairs_metrics as assembly_basepairs_metrics with:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
         "results/quality_check/{isolate}/metrics/{isolate}.assembly.tsv",
     log:
         "logs/quality_check/{isolate}_assembly_basepairs_metrics.log",
-    conda:
-        "../envs/seqkit.yaml"
-    threads: config["threads"]
-    shell:
-        """
-        seqkit stats -T --threads {threads} {input} 1> {output} 2> {log}
-        """
 
 
 rule write_coverage_and_metrics:
