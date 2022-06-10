@@ -6,13 +6,13 @@ properties:
     isolate:
           type: string
           description: isolate identifier without "_"
-    fq1:
+    forward_file:
           type: string
           description: path to the FASTQ forward file (for now local)
-    fq2:
+    reverse_file:
           type: string
           description: path to the FASTQ reverse file (for now local)
 
 required:
   - isolate
-  - fq1
+  - forward_file

@@ -14,7 +14,12 @@ validate(samples, schema="../schemas/samples.schema.yaml")
 
 # Fetch the corresponding fastq files from the given isolate
 def get_fastqs(wildcards):
-    return dict(zip(["r1", "r2"], samples.loc[wildcards.isolate, ["fq1", "fq2"]]))
+    return dict(
+        zip(
+            ["r1", "r2"],
+            samples.loc[wildcards.isolate, ["forward_file", "reverse_file"]],
+        )
+    )
 
 
 rule rename_genome_fasta:

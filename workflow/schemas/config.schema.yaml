@@ -11,7 +11,18 @@ properties:
           type: string
     threads:
           type: integer
+    phix:
+          type: string
+    reduced_tree:
+          type: boolean
+    bakta_db:
+          type: string
+    mdmcleaner_db:
+          type: string
 
 required:
   - samples
   - adapters
+  - phix
+  - bakta_db
+  - mdmcleaner_db
