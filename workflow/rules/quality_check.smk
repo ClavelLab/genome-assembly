@@ -355,7 +355,8 @@ rule write_coverage_and_metrics:
 
 rule quast_for_assembly_quality:
     input:
-        "results/quality_check/{isolate}/{isolate}.genome.fa",
+        raw_assembly="results/assembly/{isolate}/contigs.fasta",
+        final_assembly="results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
         directory("results/quality_check/{isolate}/quast"),
     log:
@@ -365,8 +366,8 @@ rule quast_for_assembly_quality:
     threads: config["threads"]
     shell:
         """
-        quast --threads {threads} --labels "{wildcards.isolate}" \
-        --no-icarus --output-dir {output} {input} > {log}
+        quast --threads {threads} --labels "{wildcards.isolate}.raw,{wildcards.isolate}.final" \
+        --no-icarus --output-dir {output} {input.raw_assembly} {input.final_assembly} > {log}
         """
 
 
