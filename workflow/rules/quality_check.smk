@@ -401,7 +401,8 @@ rule write_summary_table:
         mdmcleaner="results/quality_check/{isolate}/mdmcleaner/overview_all_before_cleanup.tsv",
         checkm="results/quality_check/{isolate}/checkm/{isolate}_checkm.tsv",
         ssu_lsu="results/quality_check/{isolate}/metaxa/{isolate}.SSU-LSU.csv",
-        quast="results/quality_check/{isolate}/quast/report.tsv",
+        trnas_5s="results/quality_check/{isolate}/bakta/{isolate}.tRNAs-5S.csv",
+        quast="results/quality_check/{isolate}/quast/transposed_report.tsv",
         genome_md5="results/quality_check/{isolate}/checksums/{isolate}_genome.md5",
     output:
         "results/summary/{isolate}.csv",
