@@ -197,8 +197,6 @@ rule check_SSU:
     conda:
         "../envs/metaxa2.yaml"
     threads: config["threads"]
-    group:
-        "SSU"
     shell:
         """
         metaxa2_x -i {input} \
@@ -211,17 +209,16 @@ rule check_SSU:
 
 rule move_SSU_sequence:
     input:
-        "SSU-{isolate}.extraction.fasta",
+        "results/quality_check/{isolate}/checkm/{isolate}_checkm.tsv",
+        seq="SSU-{isolate}.extraction.fasta",
     output:
         "results/quality_check/{isolate}/{isolate}.SSU.fa",
     conda:
         "../envs/seqkit.yaml"
     threads: 1
-    group:
-        "SSU"
     shell:
         """
-        seqkit replace -p 'NODE' -r '{wildcards.isolate}_SSU_16S_rRNA NODE' --line-width 0 --threads {threads} {input} > {output}
+        seqkit replace -p 'NODE' -r '{wildcards.isolate}_SSU_16S_rRNA NODE' --line-width 0 --threads {threads} {input.seq} > {output}
         """
 
 
@@ -237,8 +234,6 @@ rule check_LSU:
     conda:
         "../envs/metaxa2.yaml"
     threads: config["threads"]
-    group:
-        "LSU"
     shell:
         """
         metaxa2_x -i {input} \
@@ -251,17 +246,16 @@ rule check_LSU:
 
 rule move_LSU_sequence:
     input:
-        "LSU-{isolate}.extraction.fasta",
+        "results/quality_check/{isolate}/checkm/{isolate}_checkm.tsv",
+        seq="LSU-{isolate}.extraction.fasta",
     output:
         "results/quality_check/{isolate}/{isolate}.LSU.fa",
     conda:
         "../envs/seqkit.yaml"
     threads: 1
-    group:
-        "LSU"
     shell:
         """
-        seqkit replace -p 'NODE' -r '{wildcards.isolate}_LSU_23S_rRNA NODE' --line-width 0 --threads {threads} {input} > {output}
+        seqkit replace -p 'NODE' -r '{wildcards.isolate}_LSU_23S_rRNA NODE' --line-width 0 --threads {threads} {input.seq} > {output}
         """
 
 
