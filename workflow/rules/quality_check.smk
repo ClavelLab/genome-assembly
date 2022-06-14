@@ -396,6 +396,6 @@ rule write_summary_table:
     log:
         "logs/quality_check/{isolate}_summary_table.log",
     conda:
-        "../envs/notebook.yaml"
-    notebook:
-        "notebooks/quality.py.ipynb"
+        "../envs/pandas.yaml"
+    script:
+        "../scripts/write_summary_table.py"
