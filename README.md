@@ -25,3 +25,10 @@ The usage of this workflow is described in the [Snakemake Workflow Catalog](http
 
 If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) repository its DOI (see above).
 
+
+## Changelog
+
+* v2.0: Extended the assembly quality assessment to evaluate the compliance to the MIMAG and SeqCode criteria and output an aggregated summary table
+* v1.1: Added a quality control by CheckM
+* v1.0: Initial conversion of the Standard Operating Procedure used in the lab to a Snakemake workflow
+
