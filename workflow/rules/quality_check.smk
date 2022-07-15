@@ -131,11 +131,11 @@ rule bakta_for_annotation:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
-        directory("results/quality_check/{isolate}/bakta/"),
+        "results/quality_check/{isolate}/bakta/{isolate}.tsv",
     log:
         "logs/quality_check/{isolate}_bakta.log",
     params:
-        db=config["bakta_db"],
+        db=config["bakta_db"],outdir="results/quality_check/{isolate}/bakta",
     conda:
         "../envs/bakta.yaml"
     threads: config["threads"]
@@ -143,7 +143,7 @@ rule bakta_for_annotation:
         """
         bakta --db {params.db}/db/ \
         --prefix {wildcards.isolate} \
-        --output {output} \
+        --output {params.outdir} \
         --threads {threads} {input} &> {log}
         """
 
