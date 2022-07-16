@@ -12,8 +12,12 @@ for subunit in ['SSU', 'LSU']:
     with open(snakemake.input[subunit], 'r') as fasta:
         # Extract the first line of the FASTA
         header = fasta.readline()
-    # Find length of the sequence between brackets using regex
-    matches = re.findall('.*\((\d+) bp\)', header)
+        if len(header) == 0:
+            # If the FASTA file is empty, give a length of 0 bp
+            matches = [0]
+        else:
+            # Find length of the sequence between brackets using regex
+            matches = re.findall('.*\((\d+) bp\)', header)
     # Extract and format the length
     subunit_length[subunit+'_bp'] = int(matches[0])
 
