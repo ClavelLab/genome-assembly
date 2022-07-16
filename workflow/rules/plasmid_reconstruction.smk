@@ -120,7 +120,7 @@ rule index_primary_alignment:
 def guess_longest_kmer(wildcards):
     # Fetch the automatically generated spades configuration file
     spades_conf = checkpoints.plasmid_reconstruction.get(**wildcards).output[1]
-    with open(spades_conf, "r") as spades_file:
+    with spades_conf.open() as spades_file:
         # Load as a YAML each of the steps of the analysis
         spades_yaml = yaml.safe_load(spades_file)
 
