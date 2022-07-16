@@ -135,7 +135,8 @@ rule bakta_for_annotation:
     log:
         "logs/quality_check/{isolate}_bakta.log",
     params:
-        db=config["bakta_db"],outdir="results/quality_check/{isolate}/bakta",
+        db=config["bakta_db"],
+        outdir="results/quality_check/{isolate}/bakta",
     conda:
         "../envs/bakta.yaml"
     threads: config["threads"]
