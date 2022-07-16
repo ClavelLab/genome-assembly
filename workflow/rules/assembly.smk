@@ -1,6 +1,6 @@
 def assess_plasmid_reconstruction_success(wildcards):
-    # If plasmid assembly was successful
-    #  trigger the complete plasmid extraction workflow
+    # If initial plasmid assembly was successful
+    #  provide the reads w/o plasmids for genome assembly
     # Else, re-use the phiX-removed reads for assembly
     plasmid_graph = checkpoints.plasmid_reconstruction.get(**wildcards).output[0]
     with plasmid_graph.open() as f:
@@ -8,7 +8,6 @@ def assess_plasmid_reconstruction_success(wildcards):
         plasmid = f.read(1)
     # If file is empty
     if not plasmid:
-        message("No plasmid detected in the raw sequences. Moving to assembly")
         reads = [
             "results/trimmed/{isolate}.1.phix.fastq",
             "results/trimmed/{isolate}.2.phix.fastq",

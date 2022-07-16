@@ -31,12 +31,23 @@ rule rename_genome_fasta:
         "cat {input} | gzip > {output}"
 
 
-rule rename_plasmid_fasta:
+use rule rename_genome_fasta as rename_plasmid_fasta with:
     input:
         "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
     output:
         "results/plasmids/{isolate}.plasmids.fa.gz",
-    shell:
-        """
-        cat {input} | gzip > {output}
-        """
+
+
+def plasmids_when_needed():
+    # Trigger the complete plasmid extraction workflow
+    #  if initial plasmid assembly was successful
+    plasmids = []
+    for iso in samples["isolate"]:
+        plasmid_graph = checkpoints.plasmid_reconstruction.get(isolate=iso).output[0]
+        with plasmid_graph.open() as f:
+            # Read the first caracter of the graph
+            plasmid = f.read(1)
+        # If file is non empty
+        if plasmid != "":
+            plasmids.append(iso)
+    return plasmids
