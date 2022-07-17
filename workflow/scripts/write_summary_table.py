@@ -74,9 +74,9 @@ hq_criteria = {
 
 # Assess which criteria of the MIMAG and SeqCode did not pass
 to_check = [x for x in hq_criteria.keys() if not hq_criteria[x]]
-criteria = ','.join(to_check)
+criteria_false = ', '.join(to_check)
 # Indicate the assembly quality if compliance to the MIMAG and SeqCode criteria
-merged['assembly_qual'] = 'High-quality draft' if all(hq_criteria) else 'Manual review:' + criteria_false
+merged['assembly_qual'] = 'High-quality draft' if all(hq_criteria.values()) else 'Manual review: ' + criteria_false
 
 # Add the flags of the criteria to the main table
 merged = pd.merge(merged, pd.DataFrame(hq_criteria, index = [snakemake.wildcards.isolate]),
