@@ -24,10 +24,8 @@ rule all:
             isolate=samples["isolate"],
         ),
         lambda w: expand(
-            "results/plasmids/{isolate}.plasmids.fa.gz",
-            isolate=plasmids_when_needed()
+            "results/plasmids/{isolate}.plasmids.fa.gz", isolate=plasmids_when_needed()
         ),
-        expand(
-            "results/summary/{isolate}.csv",
-            isolate=samples["isolate"],
-        ),
+        "results/"
+        + os.path.basename(config["samples"]).removesuffix(".tsv")
+        + "-summary.csv",

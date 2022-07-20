@@ -400,3 +400,21 @@ rule write_summary_table:
         "../envs/pandas.yaml"
     script:
         "../scripts/write_summary_table.py"
+
+
+rule aggregate_summaries:
+    input:
+        expand(
+            "results/summary/{isolate}.csv",
+            isolate=samples["isolate"],
+        ),
+    output:
+        "results/"
+        + os.path.basename(config["samples"]).removesuffix(".tsv")
+        + "-summary.csv",
+    log:
+        "logs/quality_check/aggregate_summaries.log",
+    conda:
+        "../envs/pandas.yaml"
+    script:
+        "../scripts/aggregate_summaries.py"
