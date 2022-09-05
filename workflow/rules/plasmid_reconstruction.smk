@@ -66,7 +66,7 @@ rule align_plasmid_assembly_graph:
             ".sa",
         ),
     output:
-        "results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe.bam",
+        temp("results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe.bam"),
     log:
         "logs/plasmid_reconstruction/{isolate}_align_assembly_graph.log",
     params:
@@ -164,8 +164,8 @@ rule remove_plasmid_from_reads:
         adapters="results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
     output:
         trimmed=[
-            "results/trimmed/{isolate}.1.phix.noplasmid.fastq",
-            "results/trimmed/{isolate}.2.phix.noplasmid.fastq",
+            temp("results/trimmed/{isolate}.1.phix.noplasmid.fastq"),
+            temp("results/trimmed/{isolate}.2.phix.noplasmid.fastq"),
         ],
     log:
         "logs/plasmid_reconstruction/{isolate}_remove_plasmid_from_reads.log",

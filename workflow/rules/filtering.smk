@@ -2,10 +2,10 @@ rule remove_adapters_filter_length:
     input:
         unpack(get_fastqs),
     output:
-        r1="results/trimmed/{isolate}.1.fastq",
-        r2="results/trimmed/{isolate}.2.fastq",
-        r1_unpaired="results/trimmed/{isolate}.1.unpaired.fastq",
-        r2_unpaired="results/trimmed/{isolate}.2.unpaired.fastq",
+        r1=temp("results/trimmed/{isolate}.1.fastq"),
+        r2=temp("results/trimmed/{isolate}.2.fastq"),
+        r1_unpaired=temp("results/trimmed/{isolate}.1.unpaired.fastq"),
+        r2_unpaired=temp("results/trimmed/{isolate}.2.unpaired.fastq"),
     log:
         "logs/remove_adapters/{isolate}.log",
     conda:
@@ -34,8 +34,8 @@ rule remove_phix:
         adapters=config["phix"],
     output:
         trimmed=[
-            "results/trimmed/{isolate}.1.phix.fastq",
-            "results/trimmed/{isolate}.2.phix.fastq",
+            temp("results/trimmed/{isolate}.1.phix.fastq"),
+            temp("results/trimmed/{isolate}.2.phix.fastq"),
         ],
     log:
         "logs/remove_phix/{isolate}.log",

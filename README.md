@@ -37,6 +37,7 @@ The [documentation](config/README.md) provides more details on the configuration
 
 ## Changelog
 
+* v3.1: Reduce disk space used by flagging fast-to-generate output files as temporary (e.g., trimmed sequences, BAM file)
 * v3.0: Improved README (especially for the configuration in `config`) and fixed bugs. Failed quality criteria are correctly displayed along the aggregated table, plasmids are produced only when detected and a length of 0 bp is outputted when LSU/SSU are not detected.
 * v2.0: Extended the assembly quality assessment to evaluate the compliance to the MIMAG and SeqCode criteria and output an aggregated summary table
 * v1.1: Added a quality control by CheckM
