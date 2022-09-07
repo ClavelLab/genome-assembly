@@ -134,7 +134,7 @@ def guess_longest_kmer(wildcards):
     return lengths[0]
 
 
-rule plasmid_extraction:
+checkpoint plasmid_extraction:
     input:
         graph="results/plasmid_reconstruction/{isolate}/assembly_graph.fastg",
         bam="results/plasmid_reconstruction/{isolate}/{isolate}_reads_pe_primary.sorted.bam",
@@ -149,9 +149,11 @@ rule plasmid_extraction:
         "../envs/recycler.yaml"
     threads: config["threads"]
     shell:
+        # The || solution is from https://stackoverflow.com/a/59055330
         """
         recycle.py -g {input.graph} -b {input.bam} \
-            -k {params.max_kmer_length} &> {log}
+            -k {params.max_kmer_length} &> {log} || \
+        touch {output} && echo "Empty file produced because of Recycler error" >> {log}
         """
 
 

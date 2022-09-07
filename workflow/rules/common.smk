@@ -44,10 +44,14 @@ def plasmids_when_needed():
     plasmids = []
     for iso in samples["isolate"]:
         plasmid_graph = checkpoints.plasmid_reconstruction.get(isolate=iso).output[0]
+        extracted_graph = checkpoints.plasmid_extraction.get(**wildcards).output[0]
         with plasmid_graph.open() as f:
-            # Read the first caracter of the graph
+            # Read the first caracter of the plasmid graph
             plasmid = f.read(1)
-        # If file is non empty
-        if plasmid != "":
+        with extracted_graph.open() as f:
+            # Read the first caracter of the extracted graph
+            extracted = f.read(1)
+        # If both file are non empty
+        if plasmid != "" and extracted != "":
             plasmids.append(iso)
     return plasmids
