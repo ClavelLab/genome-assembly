@@ -44,7 +44,7 @@ def plasmids_when_needed():
     plasmids = []
     for iso in samples["isolate"]:
         plasmid_graph = checkpoints.plasmid_reconstruction.get(isolate=iso).output[0]
-        extracted_graph = checkpoints.plasmid_extraction.get(**wildcards).output[0]
+        extracted_graph = checkpoints.plasmid_extraction.get(isolate=iso).output[0]
         with plasmid_graph.open() as f:
             # Read the first caracter of the plasmid graph
             plasmid = f.read(1)
