@@ -8,6 +8,7 @@ rule remove_small_contigs:
     conda:
         "../envs/seqkit.yaml"
     threads: config["threads"]
+    priority: 10
     shell:
         """
         seqkit seq --remove-gaps --min-len 1000 --threads {threads} {input} 1> {output} 2> {log}
@@ -300,6 +301,7 @@ rule basepairs_metrics:
     conda:
         "../envs/seqkit.yaml"
     threads: config["threads"]
+    priority: 30
     shell:
         """
         seqkit stats -T --threads {threads} {input} 1> {output} 2> {log}
@@ -336,6 +338,7 @@ rule write_coverage_and_metrics:
         "logs/quality_check/{isolate}_write_coverage_and_metrics.log",
     conda:
         "../envs/pandas.yaml"
+    priority: 50
     script:
         "../scripts/write_coverage_and_metrics.py"
 
