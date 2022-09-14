@@ -153,7 +153,7 @@ checkpoint plasmid_extraction:
         """
         recycle.py -g {input.graph} -b {input.bam} \
             -k {params.max_kmer_length} &> {log} || \
-        touch {output} && echo "Empty file produced because of Recycler error" >> {log}
+        > {output} && echo "Empty file produced because of Recycler error" >> {log}
         """
 
 
