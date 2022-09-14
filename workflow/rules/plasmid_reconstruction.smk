@@ -5,6 +5,7 @@ checkpoint plasmid_reconstruction:
     output:
         "results/plasmid_reconstruction/{isolate}/assembly_graph.fastg",
         "results/plasmid_reconstruction/{isolate}/run_spades.yaml",
+        touch("results/plasmid_reconstruction/{isolate}.done"),
     log:
         "logs/plasmid_reconstruction/{isolate}_plasmid_reconstruction.log",
     conda:

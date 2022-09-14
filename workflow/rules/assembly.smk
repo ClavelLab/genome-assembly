@@ -25,9 +25,10 @@ def assess_plasmid_reconstruction_success(wildcards):
     return reads
 
 
-rule assemble_after_plasmid:
+checkpoint assemble_after_plasmid:
     input:
         assess_plasmid_reconstruction_success,
+        "results/plasmid_reconstruction/{isolate}.done",
     output:
         "results/assembly/{isolate}/contigs.fasta",
     log:

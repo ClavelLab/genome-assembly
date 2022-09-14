@@ -34,8 +34,8 @@ rule remove_phix:
         adapters=config["phix"],
     output:
         trimmed=[
-            temp("results/trimmed/{isolate}.1.phix.fastq"),
-            temp("results/trimmed/{isolate}.2.phix.fastq"),
+            "results/trimmed/{isolate}.1.phix.fastq",
+            "results/trimmed/{isolate}.2.phix.fastq",
         ],
     log:
         "logs/remove_phix/{isolate}.log",
