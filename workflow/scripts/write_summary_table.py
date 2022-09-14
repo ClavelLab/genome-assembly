@@ -1,6 +1,8 @@
 import sys
 import pandas as pd
 from functools import reduce
+from datetime import date
+import subprocess
 
 sys.stderr = open(snakemake.log[0], "w")
 
@@ -103,5 +105,16 @@ genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
                 'is_N50_grtr_25kb','is_max_contig_grtr_100kb',
                 'is_mdmcleaner_trust_grtr_5', 'is_trnas_grtr_18',
                 'is_SSU_grtr_0', 'is_LSU_grtr_0', 'is_5S_grtr_0'])
+
+# Add the date when the assembly was done
+genome_csv['assembly_date'] = date.today()
+# Get the version of the workflow and add to the table
+try:
+    get_tag = subprocess.check_output("git describe", shell=True, text=True)
+    genome_csv['workflow_version'] = get_tag.strip()
+except subprocess.CalledProcessError:
+    genome_csv['workflow_version'] = "NA"
+    print("Either git is not installed or the workflow is not run in the git repository")
+
 # Write the table to file
 genome_csv.T.to_csv(snakemake.output[0])
