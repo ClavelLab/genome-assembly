@@ -16,6 +16,7 @@ Or using a custom one:
 
     snakemake --configfile config/er2.yaml -c 9 --use-conda
 
+*Note*: The default [rerun behavior](https://github.com/snakemake/snakemake/issues/1694) of Snakemake will rerun the workflow for any possible changes in input, code, parameters, modification time or software environment. However, this implies that the workflow downstream of the plasmid extraction will be rerun *everytime* because of the presence of [checkpoints](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution). In a situation where the user knows that some steps do not need to be run again (e.g., plasmid extraction, contigs curation), the flag `--rerun-triggers {mtime,params,software-env,code}` (instead of the default: `--rerun-triggers {mtime,params,input,software-env,code}`) can be added at the user's responsibility.
 
 ## Input/Output
 
