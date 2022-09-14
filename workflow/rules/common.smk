@@ -43,15 +43,9 @@ def plasmids_when_needed():
     #  if initial plasmid assembly was successful
     plasmids = []
     for iso in samples["isolate"]:
-        plasmid_graph = checkpoints.plasmid_reconstruction.get(isolate=iso).output[0]
+        # If the extracted graph was done, it means the plasmid reconstruction was done
         extracted_graph = checkpoints.plasmid_extraction.get(isolate=iso).output[0]
-        with plasmid_graph.open() as f:
-            # Read the first caracter of the plasmid graph
-            plasmid = f.read(1)
-        with extracted_graph.open() as f:
-            # Read the first caracter of the extracted graph
-            extracted = f.read(1)
-        # If both file are non empty
-        if plasmid != "" and extracted != "":
+        # If file is non empty
+        if os.path.getsize(extracted_graph):
             plasmids.append(iso)
     return plasmids
