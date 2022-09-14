@@ -38,6 +38,7 @@ The [documentation](config/README.md) provides more details on the configuration
 
 ## Changelog
 
+* v4.0: Fix bugs such as issue with Recycler failing with unconnected plasmid assembly graph or missing gene names in annotations. Add assembly date and workflow version to the summary table. Better documentation regarding the rerun behavior of Snakemake
 * v3.2: Make sure to use at least the version `v1.5` of bakta
 * v3.1: Reduce disk space used by flagging fast-to-generate output files as temporary (e.g., trimmed sequences, BAM file)
 * v3.0: Improved README (especially for the configuration in `config`) and fixed bugs. Failed quality criteria are correctly displayed along the aggregated table, plasmids are produced only when detected and a length of 0 bp is outputted when LSU/SSU are not detected.
