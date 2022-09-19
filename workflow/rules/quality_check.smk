@@ -68,10 +68,19 @@ rule mdmcleaner_for_contamination_check:
     shell:
         """
         cd {output.mdm_dir}
+        # Try the classical MDMcleaner workflow
+        # OR use the fast_run flag as an alternative
+        # src: https://stackoverflow.com/a/73403710
         mdmcleaner clean --config ../../../../{input.config} \
         --input_fastas ../../../../{input.genome} \
         --output_folder {params.local_dir} \
-        --threads {threads} &> ../../../../{log}
+        --threads {threads} &> ../../../../{log} \
+         || echo "Using FAST-RUN for {wildcards.isolate}" && mdmcleaner clean --fast_run \
+        --config ../../../../{input.config} \
+        --input_fastas ../../../../{input.genome} \
+        --output_folder {params.local_dir} \
+        --threads {threads} &> ../../../../{log} \
+         || exit 1
         cd -
         """
 
