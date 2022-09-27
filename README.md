@@ -38,6 +38,7 @@ The [documentation](config/README.md) provides more details on the configuration
 
 ## Changelog
 
+* v4.2: Handle exceptions from MDMcleaner. Fix plasmid workflow to not trigger unneeded rules.
 * v4.1: Fix issue with the input function to keep the workflow flexible with the plasmid assembly
 * v4.0: Fix bugs such as issue with Recycler failing with unconnected plasmid assembly graph or missing gene names in annotations. Add assembly date and workflow version to the summary table. Better documentation regarding the rerun behavior of Snakemake
 * v3.2: Make sure to use at least the version `v1.5` of bakta
