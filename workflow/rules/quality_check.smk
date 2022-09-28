@@ -297,7 +297,7 @@ rule quast_for_assembly_quality:
     shell:
         """
         quast --threads {threads} --labels "{wildcards.isolate}.raw,{wildcards.isolate}.final" \
-        --no-icarus --output-dir {output.quast_dir} {input.raw_assembly} {input.final_assembly} > {log}
+        --no-icarus --min-contig 0 --output-dir {output.quast_dir} {input.raw_assembly} {input.final_assembly} > {log}
         """
 
 

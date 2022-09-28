@@ -35,7 +35,7 @@ dict_table['quast'].set_index('Assembly', inplace=True)
 # Add assembly metrics
 merged['N50'] = dict_table['quast'].loc[snakemake.wildcards.isolate+'.final', 'N50']
 merged['genome_length'] = dict_table['quast'].loc[snakemake.wildcards.isolate+'.final', 'Total length']
-merged['number_contig'] = dict_table['quast'].loc[snakemake.wildcards.isolate+'.final', '# contigs']
+merged['number_contig'] = dict_table['quast'].loc[snakemake.wildcards.isolate+'.final', '# contigs (>= 0 bp)']
 merged['number_contig_below_1kb'] = dict_table['quast'].loc[snakemake.wildcards.isolate+'.raw', '# contigs (>= 0 bp)'] - dict_table['quast'].loc[snakemake.wildcards.isolate+'.raw', '# contigs (>= 1000 bp)']
 merged['max_contig_length'] =  dict_table['quast'].loc[snakemake.wildcards.isolate+'.final','Largest contig']
 
