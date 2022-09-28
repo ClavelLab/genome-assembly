@@ -17,21 +17,29 @@ trnas = {x: annotations_trnas['Gene'].str.count(x+'_trna').sum() for x in snakem
 # How many tRNAs were detected?
 how_many = sum([trnas[x]>0 for x in trnas.keys()])
 
-# Count how many 5S rRNA genes are predicted
-five_s = int(annotations['Gene'].str.count('5S_rrna').sum())
+# Subset the annotations with the prediceted 5S rRNA genes
+five_s = annotations[annotations.Gene == '5S_rrna']
+# Compute the length
+five_s_lengths = five_s.Stop - five_s.Start
+# Extract the lengths and sort in descending order
+five_s_lengths = five_s_lengths.sort_values(ascending = False).tolist()
+# Format the lengths as strings and concatenate. No concatenation if only one element
+if five_s_lengths:
+    five_s_lengths = ';'.join([ str(x) for x in five_s_lengths ])
+else:
+    five_s_lengths = '0'
 
-# Export the detailed counts of tRNAs and 5S as a dataframe
-detailled_df = pd.merge(
-        pd.DataFrame(trnas, index=[snakemake.wildcards.isolate]),
-        pd.DataFrame({'5S_rRNA': five_s}, index=[snakemake.wildcards.isolate]),
-        left_index=True, right_index=True)
+
+
+# Export the detailed counts of tRNAs as a dataframe
+detailled_df = pd.DataFrame(trnas, index=[snakemake.wildcards.isolate])
 detailled_df.to_csv(snakemake.output.details)
 
 
 # Export the summary count dictionary of tRNAs and 5S as a dataframe
 summary_df = pd.merge(
         pd.DataFrame({'tRNAs': how_many}, index=[snakemake.wildcards.isolate]),
-        pd.DataFrame({'5S_rRNA': five_s}, index=[snakemake.wildcards.isolate]),
+        pd.DataFrame({'5S_rRNA_length': five_s_lengths}, index=[snakemake.wildcards.isolate]),
         left_index=True, right_index=True)
 summary_df.to_csv(snakemake.output.summary)
 

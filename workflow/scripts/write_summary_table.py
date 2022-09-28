@@ -68,7 +68,7 @@ hq_criteria = {
     'is_trnas_grtr_18': merged.at[snakemake.wildcards.isolate, 'trnas'] > 18,
     'is_SSU_grtr_0': merged.at[snakemake.wildcards.isolate, '16S_SSU_rRNA_length'] != "0",
     'is_LSU_grtr_0': merged.at[snakemake.wildcards.isolate, '23S_LSU_rRNA_length'] != "0",
-    'is_5S_grtr_0': merged.at[snakemake.wildcards.isolate, '5S_rRNA'] > 0,
+    'is_5S_grtr_0': merged.at[snakemake.wildcards.isolate, '5S_rRNA_length'] != "0",
 }
 
 # Assess which criteria of the MIMAG and SeqCode did not pass
@@ -94,7 +94,7 @@ genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
                 'contam_score', 'contam_software',
                 '16S_SSU_rRNA_length', 'SSU_recover_software',
                 '23S_LSU_rRNA_length', 'LSU_recover_software',
-                'trnas', 'trna_ext_software', '5S_rRNA',
+                'trnas', 'trna_ext_software', '5S_rRNA_length',
                 'forward_file', 'forward_file_md5',
                 'reverse_file', 'reverse_file_md5',
                 'sequence_count', 'basepairs_count', 'average_length',
