@@ -32,9 +32,8 @@ Place in the `resources` folder the FASTA files describing the adapters and the 
     adapters: resources/NexteraPE-PE.fa
     phix: resources/phix.fasta
 
-Specify where should the databases of bakta and MDMcleaner should be found or if not where they should be stored using these two flags:
+Specify where should the database of bakta should be found or if not where they should be stored using this flag:
 
     bakta_db: /data/bakta_db
-    mdmcleaner_db: /data/mdmcleaner_db
 
 

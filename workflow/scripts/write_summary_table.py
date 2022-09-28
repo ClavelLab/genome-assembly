@@ -9,7 +9,7 @@ sys.stderr = open(snakemake.log[0], "w")
 # Read the csv files of basepairs metrics and SSU/LSU extraction
 dict_csv = { key: pd.read_csv(snakemake.input[key], index_col=0) for key in ['metrics', 'ssu_lsu', 'trnas_5s'] }
 # Read the tsv files of sample table provided in the configuration file and outputs from genome quality assessment tools
-dict_table = { key: pd.read_table(snakemake.input[key], sep='\t') for key in ['samples', 'mdmcleaner', 'checkm', 'quast'] }
+dict_table = { key: pd.read_table(snakemake.input[key], sep='\t') for key in ['samples', 'checkm', 'quast'] }
 # Read the checksums of the raw fastq files and the genome fasta file
 dict_md5 = { key: pd.read_table(snakemake.input[key], sep='\s+', names=['md5', 'file']) for key in ['fastq_md5', 'genome_md5'] }
 
@@ -28,8 +28,6 @@ merged['compl_score'] = float(dict_table['checkm'].loc[ dict_table['checkm']['Bi
 merged['compl_software'] = 'checkm'
 merged['contam_score'] = float(dict_table['checkm'].loc[ dict_table['checkm']['Bin Id']==snakemake.wildcards.isolate+'.genome', 'Contamination'])
 merged['contam_software'] = 'checkm'
-merged['mdmcleaner_fraction_delete'] = dict_table['mdmcleaner'].at[0,'fraction_delete']
-merged['mdmcleaner_trust_score'] = dict_table['mdmcleaner'].at[0,'bin_trust']
 
 # Set the index for the QUAST data
 dict_table['quast'].set_index('Assembly', inplace=True)
@@ -67,7 +65,6 @@ hq_criteria = {
     'are_contigs_less_100': merged.at[snakemake.wildcards.isolate, 'number_contig'] < 100,
     'is_N50_grtr_25kb': merged.at[snakemake.wildcards.isolate, 'N50'] > 25000,
     'is_max_contig_grtr_100kb': merged.at[snakemake.wildcards.isolate, 'max_contig_length'] > 100000,
-    'is_mdmcleaner_trust_grtr_5': merged.at[snakemake.wildcards.isolate, 'mdmcleaner_trust_score'] > 5,
     'is_trnas_grtr_18': merged.at[snakemake.wildcards.isolate, 'trnas'] > 18,
     'is_SSU_grtr_0': merged.at[snakemake.wildcards.isolate, '16S_SSU_rRNA_length'] > 0,
     'is_LSU_grtr_0': merged.at[snakemake.wildcards.isolate, '23S_LSU_rRNA_length'] > 0,
@@ -92,7 +89,6 @@ genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
                 'coverage', 'assembly_software',
                 'compl_score', 'compl_software',
                 'contam_score', 'contam_software',
-                'mdmcleaner_fraction_delete', 'mdmcleaner_trust_score',
                 '16S_SSU_rRNA_length', 'SSU_recover_software',
                 '23S_LSU_rRNA_length', 'LSU_recover_software',
                 'trnas', 'trna_ext_software', '5S_rRNA',
@@ -103,7 +99,7 @@ genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
                 'is_compl_grtr_90', 'is_contam_less_5',
                 'is_coverage_grtr_10', 'are_contigs_less_100',
                 'is_N50_grtr_25kb','is_max_contig_grtr_100kb',
-                'is_mdmcleaner_trust_grtr_5', 'is_trnas_grtr_18',
+                'is_trnas_grtr_18',
                 'is_SSU_grtr_0', 'is_LSU_grtr_0', 'is_5S_grtr_0'])
 
 # Add the date when the assembly was done

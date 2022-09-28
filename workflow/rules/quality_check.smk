@@ -15,79 +15,9 @@ rule remove_small_contigs:
         """
 
 
-rule download_mdmcleaner_db:
-    input:
-        HTTP.remote(
-            "zenodo.org/record/5698995/files/MDMcleanerDB.tar.bz2", keep_local=False
-        ),
-    output:
-        directory(config["mdmcleaner_db"]),
-    log:
-        "logs/quality_check/download_mdmcleaner_db.log",
-    conda:
-        "../envs/mdmcleaner.yaml"
-    shell:
-        """
-        mkdir -p {output}
-        # change directory before extracting
-        tar -C {output} -xvjf {input} 2>&1 {log}
-        """
-
-
-rule set_mdmcleaner_db:
-    output:
-        "results/quality_check/mdmcleaner.config",
-    log:
-        "logs/quality_check/set_mdmcleaner_db.log",
-    params:
-        db=config["mdmcleaner_db"],
-    conda:
-        "../envs/mdmcleaner.yaml"
-    shell:
-        """
-        mdmcleaner set_configs --db_basedir {params.db}
-        mv mdmcleaner.config {output}
-        """
-
-
-rule mdmcleaner_for_contamination_check:
-    input:
-        genome="results/quality_check/{isolate}/trimmed/{isolate}.trimmed.fa",
-        config="results/quality_check/mdmcleaner.config",
-    output:
-        mdm_dir=directory("results/quality_check/{isolate}/mdmcleaner/"),
-        filtered_contigs="results/quality_check/{isolate}/mdmcleaner/mdmcleaner_{isolate}/{isolate}.trimmed/{isolate}.trimmed_filtered_kept_contigs.fasta.gz",
-        table="results/quality_check/{isolate}/mdmcleaner/overview_all_before_cleanup.tsv",
-    log:
-        "logs/quality_check/{isolate}_mdmcleaner.log",
-    params:
-        local_dir="mdmcleaner_{isolate}",
-    conda:
-        "../envs/mdmcleaner.yaml"
-    threads: config["threads"]
-    shell:
-        """
-        cd {output.mdm_dir}
-        # Try the classical MDMcleaner workflow
-        # OR use the fast_run flag as an alternative
-        # src: https://stackoverflow.com/a/73403710
-        mdmcleaner clean --config ../../../../{input.config} \
-        --input_fastas ../../../../{input.genome} \
-        --output_folder {params.local_dir} \
-        --threads {threads} &> ../../../../{log} \
-         || echo "Using FAST-RUN for {wildcards.isolate}" && mdmcleaner clean --fast_run \
-        --config ../../../../{input.config} \
-        --input_fastas ../../../../{input.genome} \
-        --output_folder {params.local_dir} \
-        --threads {threads} &> ../../../../{log} \
-         || exit 1
-        cd -
-        """
-
-
 rule rewrite_genome_headers:
     input:
-        "results/quality_check/{isolate}/mdmcleaner/mdmcleaner_{isolate}/{isolate}.trimmed/{isolate}.trimmed_filtered_kept_contigs.fasta.gz",
+        "results/quality_check/{isolate}/trimmed/{isolate}.trimmed.fa",
     output:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     conda:
@@ -398,7 +328,6 @@ rule write_summary_table:
         samples=config["samples"],
         metrics="results/quality_check/{isolate}/metrics/{isolate}.metrics.csv",
         fastq_md5="results/quality_check/{isolate}/checksums/{isolate}_raw_fastq.md5",
-        mdmcleaner="results/quality_check/{isolate}/mdmcleaner/overview_all_before_cleanup.tsv",
         checkm="results/quality_check/{isolate}/checkm/{isolate}_checkm.tsv",
         ssu_lsu="results/quality_check/{isolate}/metaxa/{isolate}.SSU-LSU.csv",
         trnas_5s="results/quality_check/{isolate}/bakta/{isolate}.tRNAs-5S.csv",
