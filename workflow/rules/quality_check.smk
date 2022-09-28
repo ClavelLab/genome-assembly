@@ -214,10 +214,35 @@ rule move_SSU_LSU_results:
         """
 
 
+rule compute_lengths_SSU:
+    input:
+        "results/quality_check/{isolate}/{isolate}.SSU.fa",
+    output:
+        "results/quality_check/{isolate}/metaxa/{isolate}.SSU.tsv",
+    log:
+        "logs/quality_check/{isolate}_compute_lengths_SSU.log",
+    conda:
+        "../envs/seqkit.yaml"
+    threads: 1
+    shell:
+        """
+        seqkit fx2tab --name --length --threads {threads} {input} 1> {output} 2> {log} || cat /dev/null > {output}
+        """
+
+
+use rule compute_lengths_SSU as compute_lengths_LSU with:
+    input:
+        "results/quality_check/{isolate}/{isolate}.LSU.fa",
+    output:
+        "results/quality_check/{isolate}/metaxa/{isolate}.LSU.tsv",
+    log:
+        "logs/quality_check/{isolate}_compute_lengths_LSU.log",
+
+
 rule aggregate_SSU_LSU_results:
     input:
-        SSU="results/quality_check/{isolate}/{isolate}.SSU.fa",
-        LSU="results/quality_check/{isolate}/{isolate}.LSU.fa",
+        SSU="results/quality_check/{isolate}/metaxa/{isolate}.SSU.tsv",
+        LSU="results/quality_check/{isolate}/metaxa/{isolate}.LSU.tsv",
         results_SSU="results/quality_check/{isolate}/metaxa/SSU-{isolate}.extraction.results",
         results_LSU="results/quality_check/{isolate}/metaxa/LSU-{isolate}.extraction.results",
     output:

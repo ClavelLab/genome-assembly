@@ -66,8 +66,8 @@ hq_criteria = {
     'is_N50_grtr_25kb': merged.at[snakemake.wildcards.isolate, 'N50'] > 25000,
     'is_max_contig_grtr_100kb': merged.at[snakemake.wildcards.isolate, 'max_contig_length'] > 100000,
     'is_trnas_grtr_18': merged.at[snakemake.wildcards.isolate, 'trnas'] > 18,
-    'is_SSU_grtr_0': merged.at[snakemake.wildcards.isolate, '16S_SSU_rRNA_length'] > 0,
-    'is_LSU_grtr_0': merged.at[snakemake.wildcards.isolate, '23S_LSU_rRNA_length'] > 0,
+    'is_SSU_grtr_0': merged.at[snakemake.wildcards.isolate, '16S_SSU_rRNA_length'] != "0",
+    'is_LSU_grtr_0': merged.at[snakemake.wildcards.isolate, '23S_LSU_rRNA_length'] != "0",
     'is_5S_grtr_0': merged.at[snakemake.wildcards.isolate, '5S_rRNA'] > 0,
 }
 
