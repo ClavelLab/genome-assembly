@@ -216,23 +216,16 @@ rule move_SSU_LSU_results:
         """
 
 
-rule compute_lengths_SSU:
+use rule compute_lengths_plasmids as compute_lengths_SSU with:
     input:
         "results/quality_check/{isolate}/{isolate}.SSU.fa",
     output:
         "results/quality_check/{isolate}/metaxa/{isolate}.SSU.tsv",
     log:
         "logs/quality_check/{isolate}_compute_lengths_SSU.log",
-    conda:
-        "../envs/seqkit.yaml"
-    threads: 1
-    shell:
-        """
-        seqkit fx2tab --name --length --threads {threads} {input} 1> {output} 2> {log} || cat /dev/null > {output}
-        """
 
 
-use rule compute_lengths_SSU as compute_lengths_LSU with:
+use rule compute_lengths_plasmids as compute_lengths_LSU with:
     input:
         "results/quality_check/{isolate}/{isolate}.LSU.fa",
     output:
@@ -360,6 +353,7 @@ rule write_summary_table:
         trnas_5s="results/quality_check/{isolate}/bakta/{isolate}.tRNAs-5S.csv",
         quast="results/quality_check/{isolate}/quast/transposed_report.tsv",
         genome_md5="results/quality_check/{isolate}/checksums/{isolate}_genome.md5",
+        plasmids="results/plasmid_reconstruction/{isolate}/plasmids_lengths.tsv",
     output:
         "results/summary/{isolate}.csv",
     log:

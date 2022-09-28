@@ -54,3 +54,4 @@ def plasmids_when_needed():
             if os.path.getsize(extracted_graph) > 0:
                 plasmids.append(iso)
     return plasmids
+

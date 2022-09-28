@@ -81,6 +81,22 @@ merged['assembly_qual'] = 'High-quality draft' if all(hq_criteria.values()) else
 merged = pd.merge(merged, pd.DataFrame(hq_criteria, index = [snakemake.wildcards.isolate]),
                   left_index=True, right_index=True)
 
+# Add the plasmids lengths if a file was provided
+if not snakemake.input['plasmids']:
+    try:
+        # Read the report
+        plasmids = pd.read_table(snakemake.input['plasmids'], names = ['file', 'length'])
+        # Extract the lengths and sort in descending order
+        plasmids = plasmids.loc[:,'length'].sort_values(ascending = False).tolist()
+        # Format the lengths as string and concatenate. No concatenation if only one element
+        merged['plasmid_length'] = ';'.join([ str(x) for x in plasmids ])
+    except pd.errors.EmptyDataError: # if the report is empty
+        merged['plasmid_length'] = '0'
+else:
+    # Add a length of 0bp if no file was provided
+    merged['plasmid_length'] = '0'
+
+
 # Add the adapters file used
 merged['adapters_file'] = snakemake.params.adapters
 
@@ -98,7 +114,7 @@ genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
                 'forward_file', 'forward_file_md5',
                 'reverse_file', 'reverse_file_md5',
                 'sequence_count', 'basepairs_count', 'average_length',
-                'sequence_count_qual', 'basepairs_count_qual', 'adapters_file',
+                'sequence_count_qual', 'basepairs_count_qual', 'adapters_file', 'plasmid_length',
                 'is_compl_grtr_90', 'is_contam_less_5',
                 'is_coverage_grtr_10', 'are_contigs_less_100',
                 'is_N50_grtr_25kb','is_max_contig_grtr_100kb',
