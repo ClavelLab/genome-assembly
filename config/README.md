@@ -36,4 +36,8 @@ Specify where should the database of bakta should be found or if not where they 
 
     bakta_db: /data/bakta_db
 
+## Assembly parameters
 
+Set the minimum contig size to be kept in the assembly in basepair:
+
+    min_contig_length: 500

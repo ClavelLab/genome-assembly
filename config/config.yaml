@@ -12,5 +12,8 @@ threads: 2
 # Use a reduced tree (~14Gb of RAM) for CheckM instead of the default (~40Gb of RAM)
 reduced_tree: true
 
+# The minimum contig size to be kept in the assembly in bp
+min_contig_length: 500
+
 # Directory path (usually external) to host the database of Bakta
 bakta_db: /data/bakta_db

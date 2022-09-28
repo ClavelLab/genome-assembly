@@ -13,6 +13,8 @@ properties:
           type: integer
     phix:
           type: string
+    min_contig_length:
+          type: integer
     reduced_tree:
           type: boolean
     bakta_db:
@@ -22,4 +24,5 @@ required:
   - samples
   - adapters
   - phix
+  - min_contig_length
   - bakta_db

@@ -9,9 +9,11 @@ rule remove_small_contigs:
         "../envs/seqkit.yaml"
     threads: config["threads"]
     priority: 10
+    params:
+        min_contig_length=config["min_contig_length"]
     shell:
         """
-        seqkit seq --remove-gaps --min-len 1000 --threads {threads} {input} 1> {output} 2> {log}
+        seqkit seq --remove-gaps --min-len {params.min_contig_length} --threads {threads} {input} 1> {output} 2> {log}
         """
 
 
