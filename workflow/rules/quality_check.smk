@@ -337,6 +337,8 @@ rule write_summary_table:
         "results/summary/{isolate}.csv",
     log:
         "logs/quality_check/{isolate}_summary_table.log",
+    params:
+        adapters=config["adapters"],
     conda:
         "../envs/pandas.yaml"
     script:

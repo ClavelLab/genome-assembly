@@ -81,6 +81,9 @@ merged['assembly_qual'] = 'High-quality draft' if all(hq_criteria.values()) else
 merged = pd.merge(merged, pd.DataFrame(hq_criteria, index = [snakemake.wildcards.isolate]),
                   left_index=True, right_index=True)
 
+# Add the adapters file used
+merged['adapters_file'] = snakemake.params.adapters
+
 # Reorder columns
 genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
                 'assembly_qual','genome_length',
@@ -95,7 +98,7 @@ genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
                 'forward_file', 'forward_file_md5',
                 'reverse_file', 'reverse_file_md5',
                 'sequence_count', 'basepairs_count', 'average_length',
-                'sequence_count_qual', 'basepairs_count_qual',
+                'sequence_count_qual', 'basepairs_count_qual', 'adapters_file',
                 'is_compl_grtr_90', 'is_contam_less_5',
                 'is_coverage_grtr_10', 'are_contigs_less_100',
                 'is_N50_grtr_25kb','is_max_contig_grtr_100kb',
@@ -104,9 +107,9 @@ genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
 
 # Add the date when the assembly was done
 genome_csv['assembly_date'] = date.today()
-# Get the version of the workflow and add to the table
+# Get the version of the workflow (and the last commit if no tags are present) and add to the table
 try:
-    get_tag = subprocess.check_output("git describe", shell=True, text=True)
+    get_tag = subprocess.check_output("git describe --always", shell=True, text=True)
     genome_csv['workflow_version'] = get_tag.strip()
 except subprocess.CalledProcessError:
     genome_csv['workflow_version'] = "NA"
