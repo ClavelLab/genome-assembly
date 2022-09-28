@@ -84,6 +84,8 @@ rule bakta_for_annotation:
         """
         bakta --db {params.db}/db/ \
         --prefix {wildcards.isolate} \
+        --locus-tag {wildcards.isolate} \
+        --compliant \
         --output {params.outdir} \
         --threads {threads} {input} &> {log}
         """
