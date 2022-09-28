@@ -36,8 +36,11 @@ The [documentation](config/README.md) provides more details on the configuration
     - genome quality metrics and the software used to calculate them (e.g., completion, contamination, tRNAs, 16S, 23S, 5S)
     - boolean flags indicating which genome quality tests passed or failed
 
+*Note*: The count of tRNAs indicated in the summary **does not** correspond to the total tRNAs found **but** to the detected number of unique *essential* tRNAs among the following: Ala, Arg, Asn, Asp, Cys, Gln, Glu, Gly, His, Ile, Leu, Lys, Met, Phe, Pro, Ser, Thr, Trp, Tyr and Val.
+
 ## Changelog
 
+* v5.0: Better summary with lengths of (multiple) 16S, 23S, 5S and plasmids. Set the minimum contig size to 500bp. Remove MDMcleaner step. Fix incorrect N50 and contig number by QUAST. Note on tRNAs.
 * v4.2: Handle exceptions from MDMcleaner. Fix plasmid workflow to not trigger unneeded rules.
 * v4.1: Fix issue with the input function to keep the workflow flexible with the plasmid assembly
 * v4.0: Fix bugs such as issue with Recycler failing with unconnected plasmid assembly graph or missing gene names in annotations. Add assembly date and workflow version to the summary table. Better documentation regarding the rerun behavior of Snakemake
