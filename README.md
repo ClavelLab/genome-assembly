@@ -40,6 +40,7 @@ The [documentation](config/README.md) provides more details on the configuration
 
 ## Changelog
 
+* v5.1: Fix issue in plasmid length summary. Remove bakta compliant mode.
 * v5.0: Better summary with lengths of (multiple) 16S, 23S, 5S and plasmids. Set the minimum contig size to 500bp. Remove MDMcleaner step. Fix incorrect N50 and contig number by QUAST. Note on tRNAs.
 * v4.2: Handle exceptions from MDMcleaner. Fix plasmid workflow to not trigger unneeded rules.
 * v4.1: Fix issue with the input function to keep the workflow flexible with the plasmid assembly
