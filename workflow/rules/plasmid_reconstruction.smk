@@ -178,9 +178,24 @@ rule remove_plasmid_from_reads:
     wrapper:
         "v1.1.0/bio/bbtools/bbduk"
 
+def assess_plasmid_reconstruction_success_for_lengths(wildcards):
+    # If initial plasmid assembly was successful
+    #  provide the reads w/o plasmids for genome assembly
+    # Else, re-use the phiX-removed reads for assembly
+    plasmid_graph = checkpoints.plasmid_reconstruction.get(**wildcards).output[0]
+    if os.path.getsize(plasmid_graph) > 0:
+        extracted_graph = checkpoints.plasmid_extraction.get(**wildcards).output[0]
+        if os.path.getsize(extracted_graph) > 0:
+            fasta = "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta"
+        else:
+            fasta = "/dev/null"
+    else:
+        fasta = "/dev/null"
+    return fasta
+
 rule compute_lengths_plasmids:
     input:
-        "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
+        assess_plasmid_reconstruction_success_for_lengths,
     output:
         "results/plasmid_reconstruction/{isolate}/plasmids_lengths.tsv",
     log:
