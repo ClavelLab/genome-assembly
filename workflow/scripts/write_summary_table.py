@@ -1,4 +1,5 @@
 import sys
+import os
 import pandas as pd
 from functools import reduce
 from datetime import date
@@ -81,15 +82,15 @@ merged['assembly_qual'] = 'High-quality draft' if all(hq_criteria.values()) else
 merged = pd.merge(merged, pd.DataFrame(hq_criteria, index = [snakemake.wildcards.isolate]),
                   left_index=True, right_index=True)
 
-# Add the plasmids lengths if a file was provided
-try:
+# Add the plasmids lengths if a non-empty file was provided
+if os.path.getsize(snakemake.input['plasmids']) > 0:
     # Read the report
     plasmids = pd.read_table(snakemake.input['plasmids'], names = ['file', 'length'])
     # Extract the lengths and sort in descending order
     plasmids = plasmids.loc[:,'length'].sort_values(ascending = False).tolist()
     # Format the lengths as string and concatenate. No concatenation if only one element
     merged['plasmid_length'] = ';'.join([ str(x) for x in plasmids ])
-except pd.errors.EmptyDataError: # if the report is empty
+else: # if the report is empty
     merged['plasmid_length'] = '0'
 
 
