@@ -91,6 +91,7 @@ The column of the output table are detailed in the next section with examples.
 
 ## Changelog
 
+* v5.3.2: Fixes for conda environments
 * v5.3: Update bakta (fix protein predictions) and minor updates ofcheckm, metaxa2 and SPades. Better documentation of the column of the output table.
 * v5.2: Recovered the behavior of length of 0bp when LSU/SSU/plasmids are not detected.
 * v5.1: Fix issue in plasmid length summary. Remove bakta compliant mode.
