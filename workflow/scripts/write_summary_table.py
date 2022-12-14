@@ -12,7 +12,7 @@ dict_csv = { key: pd.read_csv(snakemake.input[key], index_col=0) for key in ['me
 # Read the tsv files of sample table provided in the configuration file and outputs from genome quality assessment tools
 dict_table = { key: pd.read_table(snakemake.input[key], sep='\t') for key in ['samples', 'checkm', 'quast'] }
 # Read the checksums of the raw fastq files and the genome fasta file
-dict_md5 = { key: pd.read_table(snakemake.input[key], sep='\s+', names=['md5', 'file']) for key in ['fastq_md5', 'genome_md5'] }
+dict_md5 = { key: pd.read_table(snakemake.input[key], sep='\s+', names=['md5', 'file']) for key in ['fastq_md5', 'archive_md5', 'genome_md5'] }
 
 
 # Keep the csv as a list
@@ -46,8 +46,9 @@ merged['trna_ext_software'] = 'tRNAscan-SE'
 merged['assembly_software'] = 'SPAdes'
 
 # Add the location and checksums of the genome
-merged['genome_file'] = dict_md5['genome_md5'].at[0, 'file']
-merged['genome_file_md5'] = dict_md5['genome_md5'].at[0, 'md5']
+merged['archive_file'] = dict_md5['archive_md5'].at[0, 'file']
+merged['archive_file_md5'] = dict_md5['archive_md5'].at[0, 'md5']
+merged['genome_md5'] = dict_md5['genome_md5'].at[0, 'md5']
 
 # Add information about the raw sequences: location, checksums, metrics
 merged['forward_file_md5'] = dict_md5['fastq_md5'].at[0, 'md5']
@@ -98,7 +99,7 @@ else: # if the report is empty
 merged['adapters_file'] = snakemake.params.adapters
 
 # Reorder columns
-genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
+genome_csv = merged.reindex(columns=['genome_md5',
                 'assembly_qual','genome_length',
                 'number_contig', 'N50',
                 'number_contig_below_1kb', 'max_contig_length',
@@ -108,6 +109,7 @@ genome_csv = merged.reindex(columns=['genome_file', 'genome_file_md5',
                 '16S_SSU_rRNA_length', 'SSU_recover_software',
                 '23S_LSU_rRNA_length', 'LSU_recover_software',
                 'trnas', 'trna_ext_software', '5S_rRNA_length',
+                'archive_file', 'archive_file_md5',
                 'forward_file', 'forward_file_md5',
                 'reverse_file', 'reverse_file_md5',
                 'sequence_count', 'basepairs_count', 'average_length',
@@ -128,5 +130,9 @@ except subprocess.CalledProcessError:
     genome_csv['workflow_version'] = "NA"
     print("Either git is not installed or the workflow is not run in the git repository")
 
+# Convert the index to a column 'isolate' for clarity
+# src: https://stackoverflow.com/a/63926255
+genome_csv = genome_csv.rename_axis('isolate').reset_index()
+
 # Write the table to file
-genome_csv.T.to_csv(snakemake.output[0])
+genome_csv.T.to_csv(snakemake.output[0], header=False)

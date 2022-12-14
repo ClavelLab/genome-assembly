@@ -333,6 +333,17 @@ rule checksum_raw_fastq:
         "md5sum {input} 1> {output} 2> {log}"
 
 
+rule checksum_archive:
+    input:
+        "results/genome/{isolate}.genome.fa.gz",
+    output:
+        "results/quality_check/{isolate}/checksums/{isolate}_archive.md5",
+    log:
+        "logs/quality_check/{isolate}_checksum_archive.log",
+    shell:
+        "md5sum {input} 1> {output} 2> {log}"
+
+
 rule checksum_genome:
     input:
         "results/genome/{isolate}.genome.fa.gz",
@@ -341,7 +352,7 @@ rule checksum_genome:
     log:
         "logs/quality_check/{isolate}_checksum_genome.log",
     shell:
-        "md5sum {input} 1> {output} 2> {log}"
+        "zcat {input}| md5sum| sed -e 's#-#{input}#' -e 's/.gz$//' 1> {output} 2> {log}"
 
 
 rule write_summary_table:
@@ -354,6 +365,7 @@ rule write_summary_table:
         trnas_5s="results/quality_check/{isolate}/bakta/{isolate}.tRNAs-5S.csv",
         quast="results/quality_check/{isolate}/quast/transposed_report.tsv",
         genome_md5="results/quality_check/{isolate}/checksums/{isolate}_genome.md5",
+        archive_md5="results/quality_check/{isolate}/checksums/{isolate}_archive.md5",
         plasmids="results/plasmid_reconstruction/{isolate}/plasmids_lengths.tsv",
     output:
         "results/summary/{isolate}.csv",
