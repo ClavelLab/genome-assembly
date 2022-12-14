@@ -16,7 +16,11 @@ Or using a custom one:
 
     snakemake --configfile config/er2.yaml -c 9 --use-conda
 
-*Note*: The default [rerun behavior](https://github.com/snakemake/snakemake/issues/1694) of Snakemake will rerun the workflow for any possible changes in input, code, parameters, modification time or software environment. However, this implies that the workflow downstream of the plasmid extraction will be rerun *everytime* because of the presence of [checkpoints](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution). In a situation where the user knows that some steps do not need to be run again (e.g., plasmid extraction, contigs curation), the flag `--rerun-triggers {mtime,params,software-env,code}` (instead of the default: `--rerun-triggers {mtime,params,input,software-env,code}`) can be added at the user's responsibility.
+
+### Notes
+
+1. The default [rerun behavior](https://github.com/snakemake/snakemake/issues/1694) of Snakemake will rerun the workflow for any possible changes in input, code, parameters, modification time or software environment. However, this implies that the workflow downstream of the plasmid extraction will be rerun *everytime* because of the presence of [checkpoints](https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution). In a situation where the user knows that some steps do not need to be run again (e.g., plasmid extraction, contigs curation), the flag `--rerun-triggers {mtime,params,software-env,code}` (instead of the default: `--rerun-triggers {mtime,params,input,software-env,code}`) can be added at the user's responsibility.
+2. The assembly workflow is done by default only with the paired reads, but it is now possible to use the unpaired reads (quality-filtered, adapters- and phix-removed) when needed (e.g., low quality reverse reads that bring the paired reads number too low). To enable this feature, one must change the default git branch with the following command: `git checkout with-unpaired` and run the workflow according to the Usage section.
 
 ## Input/Output
 
@@ -93,6 +97,7 @@ The column of the output table are detailed in the next section with examples.
 
 ## Changelog
 
+* v6.0: Checksums for both the genome archive and FASTA file are computed. Improved the table. Assembly with unpaired reads is possible.
 * v5.3.2: Fixes for conda environments
 * v5.3: Update bakta (fix protein predictions) and minor updates ofcheckm, metaxa2 and SPades. Better documentation of the column of the output table.
 * v5.2: Recovered the behavior of length of 0bp when LSU/SSU/plasmids are not detected.
