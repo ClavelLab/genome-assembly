@@ -49,7 +49,7 @@ rule index_plasmid_assembly_graph:
     log:
         "logs/plasmid_reconstruction/{isolate}_index_assembly_graph.log",
     wrapper:
-        "v1.2.0/bio/bwa/index"
+        "v1.21.0/bio/bwa/index"
 
 
 rule align_plasmid_assembly_graph:
@@ -75,7 +75,7 @@ rule align_plasmid_assembly_graph:
         sorting="none",
     threads: config["threads"]
     wrapper:
-        "v1.2.0/bio/bwa/mem"
+        "v1.21.0/bio/bwa/mem"
 
 
 rule select_primary_alignment:
@@ -91,7 +91,7 @@ rule select_primary_alignment:
         extra="-bF 0x0800",  # remove supplementary alignments
     threads: 0.5 * config["threads"]
     wrapper:
-        "v1.2.0/bio/samtools/view"
+        "v1.21.0/bio/samtools/view"
 
 
 rule sort_primary_alignment:
@@ -103,7 +103,7 @@ rule sort_primary_alignment:
         "logs/plasmid_reconstruction/{isolate}_sort_primary_aligment.log",
     threads: 0.5 * config["threads"]
     wrapper:
-        "v1.2.0/bio/samtools/sort"
+        "v1.21.0/bio/samtools/sort"
 
 
 rule index_primary_alignment:
@@ -115,7 +115,7 @@ rule index_primary_alignment:
         "logs/plasmid_reconstruction/{isolate}_index_primary_aligment.log",
     threads: config["threads"]
     wrapper:
-        "v1.2.0/bio/samtools/index"
+        "v1.21.0/bio/samtools/index"
 
 
 def guess_longest_kmer(wildcards):
@@ -176,7 +176,7 @@ rule remove_plasmid_from_reads:
         extra=lambda w, input: "ref={} k=31 hdist=1".format(input.adapters),
     threads: config["threads"]
     wrapper:
-        "v1.1.0/bio/bbtools/bbduk"
+        "v1.21.0/bio/bbtools/bbduk"
 
 def assess_plasmid_reconstruction_success_for_lengths(wildcards):
     # If initial plasmid assembly was successful

@@ -43,4 +43,4 @@ rule remove_phix:
         extra=lambda w, input: "ref={} k=31 hdist=1".format(input.adapters),
     threads: config["threads"]
     wrapper:
-        "v1.1.0/bio/bbtools/bbduk"
+        "v1.21.0/bio/bbtools/bbduk"
