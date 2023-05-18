@@ -24,9 +24,9 @@ def get_fastqs(wildcards):
 
 rule rename_genome_fasta:
     input:
-        "results/quality_check/{isolate}/{isolate}.genome.fa",
+        "results/quality_check/{isolate}/{isolate}.combined.fa",
     output:
-        "results/genome/{isolate}.genome.fa.gz",
+        "results/genome/{isolate}.combined.fa.gz",
     shell:
         "cat {input} | gzip > {output}"
 
@@ -54,4 +54,3 @@ def plasmids_when_needed():
             if os.path.getsize(extracted_graph) > 0:
                 plasmids.append(iso)
     return plasmids
-

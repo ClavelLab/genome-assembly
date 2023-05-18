@@ -10,7 +10,7 @@ rule remove_small_contigs:
     threads: config["threads"]
     priority: 10
     params:
-        min_contig_length=config["min_contig_length"]
+        min_contig_length=config["min_contig_length"],
     shell:
         """
         seqkit seq --remove-gaps --min-len {params.min_contig_length} --threads {threads} {input} 1> {output} 2> {log}
@@ -28,14 +28,25 @@ rule rewrite_genome_headers:
     shell:
         """
         seqkit replace --pattern 'NODE(_[0-9]*_length_[0-9]*)_cov.*' \
-        --replacement '{wildcards.isolate}_contig$1' \
+        --replacement '{wildcards.isolate}_contig$1' --line-width 0 \
         {input} > {output}
         """
 
 
-rule checkM_for_quality:
+rule combine_genome_plasmids:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
+        "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
+    output:
+        "results/quality_check/{isolate}/{isolate}.combined.fa",
+    threads: 1
+    shell:
+        "cat {input} > {output}"
+
+
+rule checkM_for_quality:
+    input:
+        "results/quality_check/{isolate}/{isolate}.combined.fa",
     output:
         "results/quality_check/{isolate}/checkm/{isolate}_checkm.tsv",
     log:
@@ -71,7 +82,7 @@ rule download_bakta_db:
 
 rule bakta_for_annotation:
     input:
-        "results/quality_check/{isolate}/{isolate}.genome.fa",
+        "results/quality_check/{isolate}/{isolate}.combined.fa",
     output:
         "results/quality_check/{isolate}/bakta/{isolate}.tsv",
     log:
@@ -132,7 +143,7 @@ rule check_tRNAs_5S:
 rule check_SSU:
     # SSU: 16S (BactArch) 18S (Euk)
     input:
-        "results/quality_check/{isolate}/{isolate}.genome.fa",
+        "results/quality_check/{isolate}/{isolate}.combined.fa",
     output:
         fasta=temp("SSU-{isolate}.extraction.fasta"),
         results=temp("SSU-{isolate}.extraction.results"),
@@ -169,7 +180,7 @@ rule move_SSU_sequence:
 rule check_LSU:
     # LSU: 23 (BactArch) 5.8 & 28S (Euk)
     input:
-        "results/quality_check/{isolate}/{isolate}.genome.fa",
+        "results/quality_check/{isolate}/{isolate}.combined.fa",
     output:
         fasta=temp("LSU-{isolate}.extraction.fasta"),
         results=temp("LSU-{isolate}.extraction.results"),
@@ -280,7 +291,7 @@ use rule basepairs_metrics as trimmed_basepairs_metrics with:
 
 use rule basepairs_metrics as assembly_basepairs_metrics with:
     input:
-        "results/quality_check/{isolate}/{isolate}.genome.fa",
+        "results/quality_check/{isolate}/{isolate}.combined.fa",
     output:
         "results/quality_check/{isolate}/metrics/{isolate}.assembly.tsv",
     log:
@@ -306,7 +317,7 @@ rule write_coverage_and_metrics:
 rule quast_for_assembly_quality:
     input:
         raw_assembly="results/assembly/{isolate}/contigs.fasta",
-        final_assembly="results/quality_check/{isolate}/{isolate}.genome.fa",
+        final_assembly="results/quality_check/{isolate}/{isolate}.combined.fa",
     output:
         quast_dir=directory("results/quality_check/{isolate}/quast"),
         report="results/quality_check/{isolate}/quast/transposed_report.tsv",
@@ -335,7 +346,7 @@ rule checksum_raw_fastq:
 
 rule checksum_archive:
     input:
-        "results/genome/{isolate}.genome.fa.gz",
+        "results/genome/{isolate}.combined.fa.gz",
     output:
         "results/quality_check/{isolate}/checksums/{isolate}_archive.md5",
     log:
@@ -346,7 +357,7 @@ rule checksum_archive:
 
 rule checksum_genome:
     input:
-        "results/genome/{isolate}.genome.fa.gz",
+        "results/genome/{isolate}.combined.fa.gz",
     output:
         "results/quality_check/{isolate}/checksums/{isolate}_genome.md5",
     log:

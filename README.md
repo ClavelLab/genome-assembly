@@ -33,7 +33,7 @@ The [documentation](config/README.md) provides more details on the configuration
 
 **Output**:
 
-* The genomes of the isolates in a gzipped FASTA file format in `results/genome/isolate.genome.fa.gz`
+* The genome of the isolate (with the plasmids sequences if any) in a gzipped FASTA file format in `results/genome/isolate.combined.fa.gz`
 * The plasmids sequences of the isolates in a gzipped FASTA file format in `results/plasmids/isolate.plasmids.fa.gz`
 * A comma-separated table (in `results`) summarising the metadata on the generated genomes with for example:
     - paths to the previous files and their md5sums
