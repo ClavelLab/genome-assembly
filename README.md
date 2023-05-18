@@ -97,6 +97,7 @@ The column of the output table are detailed in the next section with examples.
 
 ## Changelog
 
+* v7.0: Concatenate genome and plasmids sequences (if any). Add plasmids proteins annotations.
 * v6.1: Fix conda environments setup by updating snakemake wrappers.
 * v6.0: Checksums for both the genome archive and FASTA file are computed. Improved the table. Assembly with unpaired reads is possible.
 * v5.3.2: Fixes for conda environments

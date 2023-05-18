@@ -33,6 +33,32 @@ rule rewrite_genome_headers:
         """
 
 
+rule get_contig_list:
+    input:
+        "results/quality_check/{isolate}/{isolate}.genome.fa",
+    output:
+        "results/quality_check/{isolate}/{isolate}.genome.tsv",
+    threads: 1
+    shell:
+        """
+        grep '>' {input} | sed 's/>//' |\
+                awk '{{OFS="\t"; print $0,$0,"contig","linear","-"}}' > {output}
+        """
+
+
+rule get_plasmid_list:
+    input:
+        "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
+    output:
+        "results/plasmid_reconstruction/{isolate}/{isolate}.plasmids.tsv",
+    threads: 1
+    shell:
+        """
+        grep '>' {input} | sed 's/>//' |\
+                awk '{{OFS="\t"; print $0,$0,"plasmid","circular","-"}}' > {output}
+        """
+
+
 rule combine_genome_plasmids:
     input:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
@@ -42,6 +68,14 @@ rule combine_genome_plasmids:
     threads: 1
     shell:
         "cat {input} > {output}"
+
+
+use rule combine_genome_plasmids as create_replicon_list with:
+    input:
+        "results/quality_check/{isolate}/{isolate}.genome.tsv",
+        "results/plasmid_reconstruction/{isolate}/{isolate}.plasmids.tsv",
+    output:
+        "results/quality_check/{isolate}/{isolate}.combined.tsv",
 
 
 rule checkM_for_quality:
@@ -82,7 +116,8 @@ rule download_bakta_db:
 
 rule bakta_for_annotation:
     input:
-        "results/quality_check/{isolate}/{isolate}.combined.fa",
+        fasta="results/quality_check/{isolate}/{isolate}.combined.fa",
+        replicon="results/quality_check/{isolate}/{isolate}.combined.tsv",
     output:
         "results/quality_check/{isolate}/bakta/{isolate}.tsv",
     log:
@@ -99,7 +134,8 @@ rule bakta_for_annotation:
         --prefix {wildcards.isolate} \
         --locus-tag {wildcards.isolate} \
         --output {params.outdir} \
-        --threads {threads} {input} &> {log}
+        --replicons {input.replicon} \
+        --threads {threads} {input.fasta} &> {log}
         """
 
 
