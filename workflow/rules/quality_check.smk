@@ -38,11 +38,14 @@ rule get_contig_list:
         "results/quality_check/{isolate}/{isolate}.genome.fa",
     output:
         "results/quality_check/{isolate}/{isolate}.genome.tsv",
+    log:
+        "logs/quality_check/{isolate}_get_contig_list.log",
     threads: 1
     shell:
         """
-        grep '>' {input} | sed 's/>//' |\
-                awk '{{OFS="\t"; print $0,$0,"contig","linear","-"}}' > {output}
+        (grep '>' {input} | sed 's/>//' |\
+                awk '{{OFS="\t"; print $0,$0,"contig","linear","-"}}' > {output}) \
+        || (cat /dev/null > {output})
         """
 
 
@@ -51,11 +54,14 @@ rule get_plasmid_list:
         "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
     output:
         "results/plasmid_reconstruction/{isolate}/{isolate}.plasmids.tsv",
+    log:
+        "logs/quality_check/{isolate}_get_plasmid_list.log",
     threads: 1
     shell:
         """
-        grep '>' {input} | sed 's/>//' |\
-                awk '{{OFS="\t"; print $0,$0,"plasmid","circular","-"}}' > {output}
+        (grep '>' {input} | sed 's/>//' |\
+                awk '{{OFS="\t"; print $0,$0,"plasmid","circular","-"}}' > {output}) \
+        || (cat /dev/null > {output})
         """
 
 
@@ -65,6 +71,8 @@ rule combine_genome_plasmids:
         "results/plasmid_reconstruction/{isolate}/assembly_graph.cycs.fasta",
     output:
         "results/quality_check/{isolate}/{isolate}.combined.fa",
+    log:
+        "logs/quality_check/{isolate}_combine_genome_plasmids.log",
     threads: 1
     shell:
         "cat {input} > {output}"
@@ -76,6 +84,8 @@ use rule combine_genome_plasmids as create_replicon_list with:
         "results/plasmid_reconstruction/{isolate}/{isolate}.plasmids.tsv",
     output:
         "results/quality_check/{isolate}/{isolate}.combined.tsv",
+    log:
+        "logs/quality_check/{isolate}_create_replicon_list.log",
 
 
 rule checkM_for_quality:
