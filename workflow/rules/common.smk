@@ -37,20 +37,3 @@ use rule rename_genome_fasta as rename_plasmid_fasta with:
     output:
         "results/plasmids/{isolate}.plasmids.fa.gz",
 
-
-def plasmids_when_needed():
-    # Trigger the complete plasmid extraction workflow
-    #  if initial plasmid assembly was successful
-    plasmids = []
-    for iso in samples["isolate"]:
-        plasmid_graph = checkpoints.plasmid_reconstruction.get(isolate=iso).output[0]
-        # Check first the plasmid reconstruction step in order
-        # to not trigger the plasmid workflow if the extraction was not run
-        if os.path.getsize(plasmid_graph) > 0:
-            # If the extracted graph was done, it means the plasmid reconstruction was done
-            # but checking only the extraction could trigger the workflow when not needed
-            extracted_graph = checkpoints.plasmid_extraction.get(isolate=iso).output[0]
-            # If file is non empty
-            if os.path.getsize(extracted_graph) > 0:
-                plasmids.append(iso)
-    return plasmids

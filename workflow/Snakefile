@@ -23,9 +23,6 @@ rule all:
             "results/genome/{isolate}.combined.fa.gz",
             isolate=samples["isolate"],
         ),
-        lambda w: expand(
-            "results/plasmids/{isolate}.plasmids.fa.gz", isolate=plasmids_when_needed()
-        ),
         "results/"
         + os.path.basename(config["samples"]).removesuffix(".tsv")
         + "-summary.csv",
