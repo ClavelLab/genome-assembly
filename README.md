@@ -97,6 +97,7 @@ The column of the output table are detailed in the next section with examples.
 
 ## Changelog
 
+* v7.2.1: Fix bugs related to Bakta version bump (force outdir and explicit column names)
 * v7.2: Update Bakta to 1.9.3 and the associated database should be minimum v5.0
 * v7.0: Concatenate genome and plasmids sequences (if any). Add plasmids proteins annotations.
 * v6.1: Fix conda environments setup by updating snakemake wrappers.
