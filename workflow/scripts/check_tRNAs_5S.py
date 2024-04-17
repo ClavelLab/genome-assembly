@@ -4,7 +4,11 @@ import pandas as pd
 sys.stderr = open(snakemake.log[0], "w")
 
 # Read Bakta tabular annotations
-annotations = pd.read_table(snakemake.input[0], sep="\t", header=2)
+# Header of TSV files changes between v1.6.3 and v1.9.3
+# https://git.rwth-aachen.de/clavellab/genome-assembly/-/issues/14
+# So more flexible input options.
+annotations = pd.read_table(snakemake.input[0], sep="\t", header=0, comment = "#",
+        names = ["Sequence Id","Start","Stop","Strand","Locus Tag","Gene","Product","DbXrefs"])
 # Casting the column as string to fix a AttributeError when no gene names are found
 #   Can only use .str accessor with string values
 annotations['Gene']=annotations['Gene'].astype(str)
