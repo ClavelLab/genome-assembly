@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+import re
 
 sys.stderr = open(snakemake.log[0], "w")
 
@@ -8,21 +9,33 @@ sys.stderr = open(snakemake.log[0], "w")
 # https://git.rwth-aachen.de/clavellab/genome-assembly/-/issues/14
 # So more flexible input options.
 annotations = pd.read_table(snakemake.input[0], sep="\t", header=0, comment = "#",
-        names = ["Sequence Id","Start","Stop","Strand","Locus Tag","Gene","Product","DbXrefs"])
+        names = ["Sequence Id","Type","Start","Stop","Strand","Locus Tag","Gene","Product","DbXrefs"])
 # Casting the column as string to fix a AttributeError when no gene names are found
 #   Can only use .str accessor with string values
-annotations['Gene']=annotations['Gene'].astype(str)
-# Keep a subset with the tRNAs in the predicted gene name and replace NaN by False
-annotations_trnas = annotations[annotations['Gene'].str.contains('_trna', na=False)]
+annotations['Product']=annotations['Product'].astype(str)
+# Keep a subset with the tRNAs in the type but not a pseudo tRNA nor undefined
+# replace NaN by True to not select them
+annotations_trnas = annotations[ (annotations['Type'] == "tRNA" ) &
+        ( ~ annotations['Product'].str.contains("pseudo", na = True) ) &
+        ( ~ annotations['Product'].str.contains("Xxx", na = True) ) ]
 
+
+# Gene: trnL
+# Product: tRNA-Leu(taa)
+# Extracted: Leu
+pattern = "tRNA-([A-Za-z]+)"
+extracted_trnas = annotations_trnas['Product'].apply(lambda x: re.findall(pattern,x)[0])
+
+d_trnas_count = extracted_trnas.value_counts().to_dict()
+# https://stackoverflow.com/a/5352630/21085566
 # Dictionary counts of the number of occurrences of each provided tRNA
-trnas = {x: annotations_trnas['Gene'].str.count(x+'_trna').sum() for x in snakemake.params.tRNAs}
+trnas = {aa: d_trnas_count.get(aa, 0) for aa in snakemake.params.tRNAs}
 
 # How many tRNAs were detected?
 how_many = sum([trnas[x]>0 for x in trnas.keys()])
 
-# Subset the annotations with the prediceted 5S rRNA genes
-five_s = annotations[annotations.Gene == '5S_rrna']
+# Subset the annotations with the predicted 5S rRNA genes
+five_s = annotations[annotations.Gene == 'rrf']
 # Compute the length
 five_s_lengths = five_s.Stop - five_s.Start
 # Extract the lengths and sort in descending order
