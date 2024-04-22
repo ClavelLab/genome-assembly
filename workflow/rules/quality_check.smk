@@ -143,6 +143,7 @@ rule bakta_for_annotation:
         bakta --db {params.db}/db/ \
         --prefix {wildcards.isolate} \
         --locus-tag {wildcards.isolate} \
+        --force \
         --output {params.outdir} \
         --replicons {input.replicon} \
         --threads {threads} {input.fasta} &> {log}
